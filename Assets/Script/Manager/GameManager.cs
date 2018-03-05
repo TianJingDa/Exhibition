@@ -9,6 +9,12 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    private LanguageController      c_LanguageCtrl;         //多语言控制器
+    private FontController          c_FontCtrl;             //字体控制器
+    private ImageController         c_ImageCtrl;            //图片控制器
+    private ModelController         c_ModelCtrl;            //模型控制器
+
+
 
     public static GameManager Instance//单例
     {
