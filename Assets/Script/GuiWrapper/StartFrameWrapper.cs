@@ -5,13 +5,15 @@ using UnityEngine;
 public class StartFrameWrapper : GuiFrameWrapper
 {
 
-	void Start ()
+    void Start()
     {
-		
-	}
-	
-	void Update ()
+        id = GuiFrameID.StartFrameWrapper;
+        Init();
+    }
+
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-		
-	}
+
+    }
+
 }

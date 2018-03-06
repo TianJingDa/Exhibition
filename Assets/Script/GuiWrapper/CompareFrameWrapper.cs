@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CompareFrameWrapper : GuiFrameWrapper
 {
+    void Start()
+    {
+        id = GuiFrameID.CompareFrameWrapper;
+        Init();
+    }
 
-	void Start ()
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-		
-	}
-	
-	void Update ()
-    {
-		
-	}
+
+    }
 }

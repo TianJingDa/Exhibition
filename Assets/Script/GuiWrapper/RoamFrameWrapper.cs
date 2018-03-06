@@ -5,13 +5,14 @@ using UnityEngine;
 public class RoamFrameWrapper : GuiFrameWrapper
 {
 
-	void Start ()
+    void Start()
     {
-		
-	}
-	
-	void Update ()
+        id = GuiFrameID.RoamFrameWrapper;
+        Init();
+    }
+
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-		
-	}
+
+    }
 }

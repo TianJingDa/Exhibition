@@ -5,13 +5,15 @@ using UnityEngine;
 public class BrowseFrameWrapper : GuiFrameWrapper
 {
 
-	void Start ()
+    void Start()
     {
-		
-	}
-	
-	void Update ()
+        id = GuiFrameID.BrowseFrameWrapper;
+        Init();
+    }
+
+    protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-		
-	}
+
+    }
+
 }

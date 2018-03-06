@@ -22,8 +22,8 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         InitButton(btnDelegate);
         InitToggle(tglDelegate);
         InitDropdown(dpdDelegate);
-        //Dictionary<string, GameObject> GameObjectDict = CommonTool.InitGameObjectDict(gameObject);
-        //GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict);
+        Dictionary<string, GameObject> GameObjectDict = CommonTool.InitGameObjectDict(gameObject);
+        GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict);
     }
 
 
@@ -55,10 +55,8 @@ public abstract class GuiFrameWrapper : MonoBehaviour
         }
     }
 
-    protected virtual void OnStart(Dictionary<string, GameObject> gameObjectDict)
-    {
+    protected abstract void OnStart(Dictionary<string, GameObject> gameObjectDict);
 
-    }
     protected virtual void OnButtonClick(Button btn)
     {
         if (!btn)

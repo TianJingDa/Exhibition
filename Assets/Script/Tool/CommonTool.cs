@@ -160,4 +160,21 @@ public static class CommonTool
 
 
     }
+    public static Dictionary<string, GameObject> InitGameObjectDict(GameObject root)
+    {
+        Dictionary<string, GameObject> gameObjectDict = new Dictionary<string, GameObject>();
+        Transform[] gameObjectArray = root.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < gameObjectArray.Length; i++)
+        {
+            try
+            {
+                gameObjectDict.Add(gameObjectArray[i].name, gameObjectArray[i].gameObject);
+            }
+            catch
+            {
+                MyDebug.LogYellow(gameObjectArray[i].name);
+            }
+        }
+        return gameObjectDict;
+    }
 }
