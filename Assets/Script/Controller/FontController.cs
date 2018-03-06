@@ -9,7 +9,6 @@ public class FontController : Controller
     private FontController()
     {
         base.id = ControllerID.FontController;
-        path = "Font/{0}";
         MyDebug.LogWhite("Loading Controller:" + id.ToString());
     }
     public static FontController Instance
@@ -17,11 +16,17 @@ public class FontController : Controller
         get { return instance ?? (instance = new FontController()); }
     }
     #endregion
-    private string path;
 
-    public Font GetFontResource(LanguageID lID)
+    private Font font;
+
+    public Font FontResource
     {
-        GameObject resouce = Resources.Load<GameObject>(string.Format(path, lID));
+        get { return font ?? (font = GetFontResource()); }
+    }
+
+    private Font GetFontResource()
+    {
+        GameObject resouce = Resources.Load<GameObject>("Font/Font");
         return resouce.GetComponent<GUIText>().font;
     }
 }
