@@ -177,4 +177,53 @@ public static class CommonTool
         }
         return gameObjectDict;
     }
+    public static void InitText(GameObject root)
+    {
+        Text[] textArray = root.GetComponentsInChildren<Text>(true);
+        if (textArray.Length == 0)
+        {
+            return;
+        }
+        Font curFont = GameManager.Instance.GetFont();
+        for (int i = 0; i < textArray.Length; i++)
+        {
+            textArray[i].font = curFont;
+            //textArray[i].color = GameManager.Instance.GetColor(textArray[i].index);
+            if (string.IsNullOrEmpty(textArray[i].index))
+            {
+                textArray[i].text = "";
+            }
+            else
+            {
+                textArray[i].text = GameManager.Instance.GetMutiLanguage(textArray[i].index);
+            }
+        }
+    }
+    public static void InitImage(GameObject root)
+    {
+        Image[] imageArray = root.GetComponentsInChildren<Image>(true);
+        if (imageArray.Length == 0)
+        {
+            return;
+        }
+        for (int i = 0; i < imageArray.Length; i++)
+        {
+            if (string.IsNullOrEmpty(imageArray[i].index))
+            {
+                imageArray[i].color = Color.white;
+                continue;
+            }
+            Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
+            if (sprite != null)
+            {
+                imageArray[i].color = Color.white;
+                imageArray[i].sprite = sprite;
+            }
+            //else
+            //{
+            //    MyDebug.LogYellow("Can not load Sprite:" + imageArray[i].index);
+            //}
+        }
+    }
+
 }

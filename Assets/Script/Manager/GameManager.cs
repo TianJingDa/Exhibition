@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     private StateController         c_StateCtrl;            //状态控制器
 
 
-
     public static GameManager Instance//单例
     {
         get;
@@ -43,6 +42,19 @@ public class GameManager : MonoBehaviour
 
         c_StateCtrl.InitState();
         c_GuiCtrl.InitUI();
+    }
+
+    public string GetMutiLanguage(string index)
+    {
+        return c_LanguageCtrl.GetMutiLanguage(index);
+    }
+    public Font GetFont()
+    {
+        return c_FontCtrl.FontResource;
+    }
+    public Sprite GetSprite(string index)
+    {
+        return c_ImageCtrl.GetSpriteResource(index);
     }
 
 }

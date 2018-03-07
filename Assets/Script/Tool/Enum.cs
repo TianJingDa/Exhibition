@@ -1,10 +1,4 @@
-﻿public enum LanguageID
-{
-    Chinese,
-    English
-}
-
-public enum GuiFrameID
+﻿public enum GuiFrameID
 {
     StartFrameWrapper,         //开始界面
     BrowseFrameWrapper,        //浏览界面

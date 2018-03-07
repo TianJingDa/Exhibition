@@ -16,7 +16,9 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     
     protected void Init()
     {
-        ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
+        CommonTool.InitText(gameObject);
+        CommonTool.InitImage(gameObject);
+        ButtonDelegate btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
         ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
         DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
         InitButton(btnDelegate);

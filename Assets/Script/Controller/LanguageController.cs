@@ -32,7 +32,7 @@ public class LanguageController : Controller
     /// </summary>
     /// <param name="index">序号</param>
     /// <returns>内容</returns>
-    public string GetMutiLanguage(string index, LanguageID language)
+    public string GetMutiLanguage(string index)
     {
         string[] languageArray = null;
         mutiLanguageDict.TryGetValue(index, out languageArray);
@@ -42,7 +42,7 @@ public class LanguageController : Controller
         }
         else
         {
-            string text = languageArray[(int)language];
+            string text = languageArray[0];
             if (text.Contains("\\n")) text = text.Replace("\\n", "\n");
             if (text.Contains("\\u3000")) text = text.Replace("\\u3000", "\u3000");
             return text;
