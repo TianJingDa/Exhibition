@@ -19,7 +19,7 @@ public class StateController : Controller
     #endregion
 
     private Dictionary<StateID, State> stateDict;
-    private State lastState;
+    private State curState;
 
     private void InitStateData()
     {
@@ -35,16 +35,16 @@ public class StateController : Controller
     public void InitState()
     {
         stateDict[StateID.StartState].Enter();
-        lastState = stateDict[StateID.StartState];
+        curState = stateDict[StateID.StartState];
     }
 
-    public void SwitchState(StateID targetID)
+    public void SwitchState(StateID targetID,GameObject model)
     {
-        if (lastState != null)
+        if (curState != null)
         {
-            lastState.Exit();
-            stateDict[targetID].Enter();
-            lastState = stateDict[targetID];
+            curState.Exit();
+            stateDict[targetID].Enter(model);
+            curState = stateDict[targetID];
         }
         else
         {
@@ -52,4 +52,18 @@ public class StateController : Controller
         }
     }
 
+    public void SwitchMainModel(GameObject model)
+    {
+        curState.SwitchMainModel(model);
+    }
+
+    public void SwitchViceModel(GameObject model)
+    {
+        curState.SwitchViceModel(model);
+    }
+
+    public void ResetState()
+    {
+        curState.Reset();
+    }
 }

@@ -18,11 +18,20 @@ public class StartState : State
     }
     #endregion
 
-    public override void Enter()
+    public override void Enter(GameObject model = null)
     {
+        GameManager.Instance.SetCameraActive(false, false);
     }
 
     public override void Exit()
+    {
+    }
+
+    public override void SwitchMainModel(GameObject model)
+    {
+    }
+
+    public override void SwitchViceModel(GameObject model)
     {
     }
 

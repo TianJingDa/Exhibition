@@ -10,10 +10,27 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
 
+    protected Canvas hideCanvas;
+
     private delegate void ButtonDelegate(Button btn);
     private delegate void ToggleDelegate(Toggle tgl);
     private delegate void DropdownDelegate(Dropdown dpd);
-    
+
+    void OnEnable()
+    {
+        
+    }
+
+    void Update()
+    {
+        
+    }
+
+    void OnDisable()
+    {
+        
+    }
+
     protected void Init()
     {
         CommonTool.InitText(gameObject);

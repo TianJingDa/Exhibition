@@ -5,16 +5,44 @@ using UnityEngine.UI;
 
 public class StartFrameWrapper : GuiFrameWrapper
 {
+    private int tempModelID;//所选的户型
+    private int tempStateID;//所选的模式
+
+    private Dropdown modelDropdown;
+    private Dropdown stateDropdown;
 
     void Start()
     {
         id = GuiFrameID.StartFrameWrapper;
         Init();
+        RefreshDropdown(modelDropdown);
+        RefreshDropdown(stateDropdown);
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
+        modelDropdown       = gameObjectDict["ModelDropdown"].GetComponent<Dropdown>();
+        stateDropdown       = gameObjectDict["StateDropdown"].GetComponent<Dropdown>();
+    }
 
+    /// <summary>
+    /// 刷新Dropdown的状态
+    /// </summary>
+    /// <param name="dpd"></param>
+    /// <param name="index"></param>
+    private void RefreshDropdown(Dropdown dpd)
+    {
+        if (!dpd)
+        {
+            MyDebug.LogYellow("Dropdown is null!");
+            return;
+        }
+        for (int i = 0; i < dpd.options.Count; i++)
+        {
+            dpd.options[i].text = GameManager.Instance.GetMutiLanguage(dpd.options[i].text);
+        }
+        dpd.value = 0;
+        dpd.RefreshShownValue();
     }
 
     protected override void OnButtonClick(Button btn)
@@ -24,7 +52,9 @@ public class StartFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "StartBtn":
-                MyDebug.LogGreen("StartBtn");
+                GameManager.Instance.CurMainModelID = (ModelID)tempModelID;
+                GameManager.Instance.CurStateID = (StateID)tempStateID;
+                GameManager.Instance.SwitchModelAndState();
                 break;
             case "ComputeBtn":
                 MyDebug.LogGreen("ComputeBtn");
@@ -44,11 +74,11 @@ public class StartFrameWrapper : GuiFrameWrapper
 
         switch (dpd.name)
         {
-            case "LayoutDropdown":
-                MyDebug.LogGreen("LayoutDropdown");
+            case "ModelDropdown":
+                tempModelID = dpd.value;
                 break;
-            case "ModeDropdown":
-                MyDebug.LogGreen("ModeDropdown");
+            case "StateDropdown":
+                tempStateID = dpd.value;
                 break;
             default:
                 MyDebug.LogYellow("Can not find Dropdown:" + dpd.name);
