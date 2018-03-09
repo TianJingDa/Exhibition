@@ -20,13 +20,13 @@ public class GameManager : MonoBehaviour
     private GameObject              viceCamera;             //副摄像机
 
 
-    public ModelID CurMainModelID
+    public int CurMainModelID
     {
         private get;
         set;
     }
 
-    public ModelID CurViceModelID
+    public int CurViceModelID
     {
         private get;
         set;
@@ -100,11 +100,15 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public GameObject GetModel(ModelID id)
+    public GameObject GetModel(int id)
     {
         GameObject model = c_ModelCtrl.GetModelResource(id);
         if (!model) MyDebug.LogYellow("Can Not Get Model!!!");
         return model;
+    }
+    public List<string> GetAllModelNames()
+    {
+        return c_ModelCtrl.GetAllModelNames();
     }
     /// <summary>
     /// 切换模型和状态

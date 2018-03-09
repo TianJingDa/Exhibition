@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HedgehogTeam.EasyTouch;
 
 /// <summary>
 /// 所有GUI显示层的基类，先用数据初始化再找物体
@@ -10,39 +11,31 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
 
-    protected Canvas hideCanvas;
+    protected GameObject hidePanel;
 
     private delegate void ButtonDelegate(Button btn);
     private delegate void ToggleDelegate(Toggle tgl);
     private delegate void DropdownDelegate(Dropdown dpd);
 
-    void OnEnable()
-    {
-        
-    }
-
     void Update()
     {
-        
-    }
-
-    void OnDisable()
-    {
-        
+        if (hidePanel && EasyTouch.current.type == EasyTouch.EvtType.On_DoubleTap)
+            hidePanel.SetActive(!hidePanel.activeSelf);
     }
 
     protected void Init()
     {
         CommonTool.InitText(gameObject);
         CommonTool.InitImage(gameObject);
-        ButtonDelegate btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
+        ButtonDelegate   btnDelegate = GetComponent<GuiFrameWrapper>().OnButtonClick;
         ToggleDelegate   tglDelegate = GetComponent<GuiFrameWrapper>().OnToggleClick;
         DropdownDelegate dpdDelegate = GetComponent<GuiFrameWrapper>().OnDropdownClick;
         InitButton(btnDelegate);
         InitToggle(tglDelegate);
         InitDropdown(dpdDelegate);
-        Dictionary<string, GameObject> GameObjectDict = CommonTool.InitGameObjectDict(gameObject);
-        GetComponent<GuiFrameWrapper>().OnStart(GameObjectDict);
+        Dictionary<string, GameObject> gameObjectDict = CommonTool.InitGameObjectDict(gameObject);
+        GetComponent<GuiFrameWrapper>().OnStart(gameObjectDict);
+        gameObjectDict.TryGetValue("HidePanel", out hidePanel);
     }
 
 

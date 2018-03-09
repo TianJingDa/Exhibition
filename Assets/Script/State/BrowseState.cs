@@ -19,7 +19,7 @@ public class BrowseState : State
 
     public override void Enter(GameObject model = null)
     {
-        GameManager.Instance.SetCameraActive(true, false);
+        GameManager.Instance.SetCameraActive(false, false);
         curMainModel = model;
         Reset();
     }

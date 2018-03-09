@@ -117,7 +117,7 @@ public class UITool : Editor
             }
         }
     }
-    [MenuItem("Custom Editor/生成多语言")]
+    [MenuItem("Custom Editor/生成多语言表")]
     public static void MakeMutiLanguageJson()
     {
         StreamReader mutiLanguageAsset = new StreamReader(Application.dataPath + "/MutiLanguage.txt");
@@ -140,6 +140,30 @@ public class UITool : Editor
         if (File.Exists(path)) File.Delete(path);
         IOHelper.SetData(path, mutiLanguageDict);
     }
+    [MenuItem("Custom Editor/生成模型表")]
+    public static void MakeModelJson()
+    {
+        StreamReader modelAsset = new StreamReader(Application.dataPath + "/Model.txt");
+        if (modelAsset == null)
+        {
+            MyDebug.LogYellow("Can not find Model.txt !!");
+            return;
+        }
+        Dictionary<string, string> modelDict = new Dictionary<string, string>();
+        char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
+        string asset = modelAsset.ReadToEnd();
+        string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+        List<string> lineList;
+        for (int i = 1; i < lineArray.Length; i++)
+        {
+            lineList = new List<string>(lineArray[i].Split(','));
+            modelDict.Add(lineList[0], lineList[lineList.Count - 1]);
+        }
+        string path = Application.dataPath + "/Resources/Model/Model.txt";
+        if (File.Exists(path)) File.Delete(path);
+        IOHelper.SetData(path, modelDict);
+    }
+
     [MenuItem("Custom Editor/转换prefab/Default")]
     public static void DefaultPrefab()
     {

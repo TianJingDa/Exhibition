@@ -20,23 +20,26 @@ public class ModelController : Controller
     /// <summary>
     /// 模型字典，key是模型枚举，value是模型地址
     /// </summary>
-    private Dictionary<ModelID, string> modelDict;
+    private Dictionary<string, string> modelDict;
 
     /// <summary>
     /// 初始化模型字典
     /// </summary>
     private void InitModelData()
     {
-        modelDict = new Dictionary<ModelID, string>()
-        {
-            { ModelID.Test, "Model/Test" }
-        };
+        string path = "Model/Model";
+        modelDict = (Dictionary<string, string>)IOHelper.GetDataFromResources(path, typeof(Dictionary<string, string>));
     }
 
-    public GameObject GetModelResource(ModelID id)
+    public GameObject GetModelResource(int id)
     {
-        GameObject resouce = Resources.Load<GameObject>(modelDict[id]);
-        return resouce;
+        GameObject resouce = Resources.Load<GameObject>("Model/" + id.ToString());
+        return Object.Instantiate(resouce,Vector3.zero,Quaternion.identity);
+    }
+
+    public List<string> GetAllModelNames()
+    {
+        return new List<string>(modelDict.Values);
     }
 
 }
