@@ -21,7 +21,15 @@ public class CompareState : State
     {
         GameManager.Instance.SetCameraActive(true, true);
         curMainModel = model;
+        curMainModel.tag = "MainModel";
+        curMainModel.AddComponent<ModelGesture>();
         curViceModel = GameManager.Instance.GetModel(0);
+        curViceModel.tag = "ViceModel";
+        curViceModel.AddComponent<ModelGesture>();
+        initMainEulerAngles = curMainModel.transform.eulerAngles;
+        initMainScale = curMainModel.transform.localScale;
+        initViceEulerAngles = curViceModel.transform.eulerAngles;
+        initViceScale = curViceModel.transform.localScale;
         GameManager.Instance.SetMainCameraViewport(new Rect(0, 0, 0.5f, 1));
         Reset();
     }
@@ -37,30 +45,39 @@ public class CompareState : State
     {
         Object.Destroy(curMainModel);
         curMainModel = model;
-
-        curMainModel.transform.position = Vector3.zero;
-        curMainModel.transform.rotation = Quaternion.identity;
-        //GameManager.Instance.SetMainCameraAngle(0);
+        curMainModel.tag = "MainModel";
+        curMainModel.AddComponent<ModelGesture>();
+        ResetMainModel();
     }
 
     public override void SwitchViceModel(GameObject model)
     {
         Object.Destroy(curViceModel);
         curViceModel = model;
-
-        curViceModel.transform.position = new Vector3(10000, 0, 0);
-        curViceModel.transform.rotation = Quaternion.identity;
-        //GameManager.Instance.SetViceCameraAngle(0);
+        curViceModel.tag = "ViceModel";
+        curViceModel.AddComponent<ModelGesture>();
+        ResetViceModel();
     }
 
     public override void Reset()
     {
-        curMainModel.transform.position = Vector3.zero;
-        curMainModel.transform.rotation = Quaternion.identity;
-
-        curViceModel.transform.position = new Vector3(10000, 0, 0);
-        curViceModel.transform.rotation = Quaternion.identity;
-
+        ResetMainModel();
+        ResetViceModel();
         GameManager.Instance.SetCameraAngel(0);
     }
+
+    private void ResetMainModel()
+    {
+        curMainModel.transform.position = Vector3.zero;
+        curMainModel.transform.eulerAngles = initMainEulerAngles;
+        curMainModel.transform.localScale = initMainScale;
+    }
+
+    private void ResetViceModel()
+    {
+        curViceModel.transform.position = new Vector3(10000, 0, 0);
+        curViceModel.transform.eulerAngles = initMainEulerAngles;
+        curViceModel.transform.localScale = initMainScale;
+    }
 }
+

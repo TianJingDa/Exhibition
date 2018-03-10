@@ -175,6 +175,10 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
         viceCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
     }
+    /// <summary>
+    /// 设置主摄像机的范围
+    /// </summary>
+    /// <param name="rect"></param>
     public void SetMainCameraViewport(Rect rect)
     {
         mainCamera.GetComponentInChildren<Camera>().rect = rect;
@@ -185,5 +189,9 @@ public class GameManager : MonoBehaviour
     public void ResetState()
     {
         c_StateCtrl.ResetState();
+    }
+    public StateID GetCurStateID()
+    {
+        return c_StateCtrl.GetCurStateID();
     }
 }

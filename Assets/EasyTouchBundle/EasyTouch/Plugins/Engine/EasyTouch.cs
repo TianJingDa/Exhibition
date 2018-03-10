@@ -399,9 +399,9 @@ public class EasyTouch : MonoBehaviour {
 		twoFingerPickMethod = TwoFingerPickMethod.Finger;
 		enable2FingersSwipe = true;
 		enablePinch = true;
-		minPinchLength = 0f;
+		minPinchLength = 30f;
 		enableTwist = true;
-		minTwistAngle = 0f;
+		minTwistAngle = 1f;
 
 		enableSimulation = true;
 		twistKey = KeyCode.LeftAlt;
@@ -1064,7 +1064,7 @@ public class EasyTouch : MonoBehaviour {
 		#region Pinch
 		if (enablePinch){
 
-			if ((Mathf.Abs(twoFinger.fingerDistance - twoFinger.startDistance)>= minPinchLength && twoFinger.currentGesture != GestureType.Pinch) || twoFinger.currentGesture== GestureType.Pinch ){
+			if ((Mathf.Abs(twoFinger.fingerDistance - twoFinger.startDistance) >= minPinchLength && twoFinger.currentGesture != GestureType.Pinch && twoFinger.currentGesture != GestureType.Twist) || twoFinger.currentGesture== GestureType.Pinch ){
 
 				if (currentDelta !=0 && twoFinger.oldGesture == GestureType.LongTap){
 					CreateStateEnd2Fingers(twoFinger.currentGesture,twoFinger.startPosition,twoFinger.position,twoFinger.deltaPosition,twoFinger.timeSinceStartAction,false,twoFinger.fingerDistance);
@@ -1102,7 +1102,7 @@ public class EasyTouch : MonoBehaviour {
 			if (previousDistance == currentDistance)
 				twistAngle =0;
 
-			if ( Mathf.Abs(twistAngle)>=minTwistAngle && (twoFinger.currentGesture != GestureType.Twist ) || twoFinger.currentGesture== GestureType.Twist ){
+			if ((Mathf.Abs(twistAngle) >= minTwistAngle && twoFinger.currentGesture != GestureType.Twist && twoFinger.currentGesture != GestureType.Pinch) || twoFinger.currentGesture== GestureType.Twist ){
 				
 				if ( twoFinger.oldGesture == GestureType.LongTap){
 					CreateStateEnd2Fingers(twoFinger.currentGesture,twoFinger.startPosition,twoFinger.position,twoFinger.deltaPosition,twoFinger.timeSinceStartAction,false,twoFinger.fingerDistance);

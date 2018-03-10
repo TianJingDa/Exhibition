@@ -208,15 +208,12 @@ public static class CommonTool
         }
         for (int i = 0; i < imageArray.Length; i++)
         {
-            if (string.IsNullOrEmpty(imageArray[i].index))
-            {
-                imageArray[i].color = Color.white;
-                continue;
-            }
+            if (string.IsNullOrEmpty(imageArray[i].index)) continue;
             Sprite sprite = GameManager.Instance.GetSprite(imageArray[i].index);
             if (sprite != null)
             {
-                imageArray[i].color = Color.white;
+                float a = imageArray[i].color.a;
+                imageArray[i].color = new Color(1, 1, 1, a);
                 imageArray[i].sprite = sprite;
             }
             //else

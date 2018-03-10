@@ -66,4 +66,9 @@ public class StateController : Controller
     {
         curState.Reset();
     }
+
+    public StateID GetCurStateID()
+    {
+        return curState.id;
+    }
 }

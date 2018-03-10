@@ -10,6 +10,14 @@ public abstract class State
 
     protected GameObject curViceModel;                          //当前显示的副模型
 
+    protected Vector3 initMainEulerAngles;                         //主模型的初始旋转角
+    
+    protected Vector3 initViceEulerAngles;                         //副模型的初始旋转角
+
+    protected Vector3 initMainScale;                            //主模型的初始大小
+
+    protected Vector3 initViceScale;                            //副模型的初始大小
+
     public abstract void Enter(GameObject model = null);        //进入该状态时的处理
 
     public abstract void Exit();                                //退出该状态时的处理

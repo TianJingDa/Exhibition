@@ -21,6 +21,9 @@ public class BrowseState : State
     {
         GameManager.Instance.SetCameraActive(true, false);
         curMainModel = model;
+        initMainEulerAngles = model.transform.eulerAngles;
+        initMainScale = model.transform.localScale;
+        curMainModel.AddComponent<ModelGesture>();
         Reset();
     }
 
@@ -33,6 +36,7 @@ public class BrowseState : State
     {
         Object.Destroy(curMainModel);
         curMainModel = model;
+        curMainModel.AddComponent<ModelGesture>();
         Reset();
     }
 
@@ -43,7 +47,8 @@ public class BrowseState : State
     public override void Reset()
     {
         curMainModel.transform.position = Vector3.zero;
-        curMainModel.transform.rotation = Quaternion.identity;
+        curMainModel.transform.eulerAngles = initMainEulerAngles;
+        curMainModel.transform.localScale = initMainScale;
         GameManager.Instance.SetMainCameraAngle(0);
     }
 }

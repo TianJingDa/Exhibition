@@ -34,7 +34,7 @@ public class ModelController : Controller
     public GameObject GetModelResource(int id)
     {
         GameObject resouce = Resources.Load<GameObject>("Model/" + id.ToString());
-        return Object.Instantiate(resouce,Vector3.zero,Quaternion.identity);
+        return Object.Instantiate(resouce);
     }
 
     public List<string> GetAllModelNames()
