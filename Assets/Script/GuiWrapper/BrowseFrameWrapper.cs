@@ -49,6 +49,9 @@ public class BrowseFrameWrapper : GuiFrameWrapper
             case "Browse2StartBtn":
                 GameManager.Instance.SwitchStateAndModel(StateID.StartState,-1);
                 break;
+            case "HideModelSwitchBtn":
+                modelSwitchContentInBrowse.SetActive(false);
+                break;
             case "ModelSwitchBtnInBrowse":
                 modelSwitchContentInBrowse.SetActive(!modelSwitchContentInBrowse.activeSelf);
                 break;

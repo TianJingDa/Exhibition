@@ -166,6 +166,20 @@ public class GameManager : MonoBehaviour
         viceCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
     }
     /// <summary>
+    /// 同时改变主副摄像机的角度
+    /// </summary>
+    /// <param name="angle"></param>
+    public void SetCameraAngel(float angle)
+    {
+        float angleX = (maxCameraAngel - minCameraAngel) * angle + minCameraAngel;
+        mainCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
+        viceCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
+    }
+    public void SetMainCameraViewport(Rect rect)
+    {
+        mainCamera.GetComponentInChildren<Camera>().rect = rect;
+    }
+    /// <summary>
     /// 重置状态
     /// </summary>
     public void ResetState()

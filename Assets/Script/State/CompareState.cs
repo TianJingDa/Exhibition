@@ -22,6 +22,7 @@ public class CompareState : State
         GameManager.Instance.SetCameraActive(true, true);
         curMainModel = model;
         curViceModel = GameManager.Instance.GetModel(0);
+        GameManager.Instance.SetMainCameraViewport(new Rect(0, 0, 0.5f, 1));
         Reset();
     }
 
@@ -29,6 +30,7 @@ public class CompareState : State
     {
         Object.Destroy(curMainModel);
         Object.Destroy(curViceModel);
+        GameManager.Instance.SetMainCameraViewport(new Rect(0, 0, 1, 1));
     }
 
     public override void SwitchMainModel(GameObject model)
@@ -38,7 +40,7 @@ public class CompareState : State
 
         curMainModel.transform.position = Vector3.zero;
         curMainModel.transform.rotation = Quaternion.identity;
-        GameManager.Instance.SetMainCameraAngle(0);
+        //GameManager.Instance.SetMainCameraAngle(0);
     }
 
     public override void SwitchViceModel(GameObject model)
@@ -48,17 +50,17 @@ public class CompareState : State
 
         curViceModel.transform.position = new Vector3(10000, 0, 0);
         curViceModel.transform.rotation = Quaternion.identity;
-        GameManager.Instance.SetViceCameraAngle(0);
+        //GameManager.Instance.SetViceCameraAngle(0);
     }
 
     public override void Reset()
     {
         curMainModel.transform.position = Vector3.zero;
         curMainModel.transform.rotation = Quaternion.identity;
-        GameManager.Instance.SetMainCameraAngle(0);
 
         curViceModel.transform.position = new Vector3(10000, 0, 0);
         curViceModel.transform.rotation = Quaternion.identity;
-        GameManager.Instance.SetViceCameraAngle(0);
+
+        GameManager.Instance.SetCameraAngel(0);
     }
 }
