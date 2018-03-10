@@ -19,13 +19,14 @@ public class BrowseState : State
 
     public override void Enter(GameObject model = null)
     {
-        GameManager.Instance.SetCameraActive(false, false);
+        GameManager.Instance.SetCameraActive(true, false);
         curMainModel = model;
         Reset();
     }
 
     public override void Exit()
     {
+        Object.Destroy(curMainModel);
     }
 
     public override void SwitchMainModel(GameObject model)

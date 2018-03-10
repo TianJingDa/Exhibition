@@ -27,6 +27,8 @@ public class CompareState : State
 
     public override void Exit()
     {
+        Object.Destroy(curMainModel);
+        Object.Destroy(curViceModel);
     }
 
     public override void SwitchMainModel(GameObject model)
@@ -44,7 +46,7 @@ public class CompareState : State
         Object.Destroy(curViceModel);
         curViceModel = model;
 
-        curViceModel.transform.position = new Vector3(0, -10000, 0);
+        curViceModel.transform.position = new Vector3(10000, 0, 0);
         curViceModel.transform.rotation = Quaternion.identity;
         GameManager.Instance.SetViceCameraAngle(0);
     }
@@ -55,7 +57,7 @@ public class CompareState : State
         curMainModel.transform.rotation = Quaternion.identity;
         GameManager.Instance.SetMainCameraAngle(0);
 
-        curViceModel.transform.position = new Vector3(0, -10000, 0);
+        curViceModel.transform.position = new Vector3(10000, 0, 0);
         curViceModel.transform.rotation = Quaternion.identity;
         GameManager.Instance.SetViceCameraAngle(0);
     }

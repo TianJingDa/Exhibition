@@ -14,6 +14,8 @@ public class StartFrameWrapper : GuiFrameWrapper
     void Start()
     {
         id = GuiFrameID.StartFrameWrapper;
+        tempModelID = 0;
+        tempStateID = 0;
         Init();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
         RefreshDropdown(modelDropdown, dropDownOptions);
@@ -65,9 +67,7 @@ public class StartFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "StartBtn":
-                GameManager.Instance.CurMainModelID = tempModelID;
-                GameManager.Instance.CurStateID = (StateID)tempStateID;
-                GameManager.Instance.SwitchModelAndState();
+                GameManager.Instance.SwitchStateAndModel((StateID)tempStateID, tempModelID);
                 break;
             case "ComputeBtn":
                 MyDebug.LogGreen("ComputeBtn");

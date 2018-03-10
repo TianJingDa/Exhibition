@@ -16,28 +16,10 @@ public class GameManager : MonoBehaviour
     private GuiController           c_GuiCtrl;              //UI控制器
     private StateController         c_StateCtrl;            //状态控制器
 
+    private int                     minCameraAngel;         //摄像机最小俯角
+    private int                     maxCameraAngel;         //摄像机最大俯角
     private GameObject              mainCamera;             //主摄像机
     private GameObject              viceCamera;             //副摄像机
-
-
-    public int CurMainModelID
-    {
-        private get;
-        set;
-    }
-
-    public int CurViceModelID
-    {
-        private get;
-        set;
-    }
-
-    public StateID CurStateID
-    {
-        private get;
-        set;
-    }
-
 
 
     public static GameManager Instance//单例
@@ -65,6 +47,9 @@ public class GameManager : MonoBehaviour
 
         mainCamera = GameObject.Find("Main Camera");
         viceCamera = GameObject.Find("Vice Camera");
+
+        minCameraAngel = 30;
+        maxCameraAngel = 90;
 
         c_GuiCtrl.InitUI();
         c_StateCtrl.InitState();
@@ -113,23 +98,25 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 切换模型和状态
     /// </summary>
-    public void SwitchModelAndState()
+    /// <param name="sID">状态ID</param>
+    /// <param name="mID">模型ID</param>
+    public void SwitchStateAndModel(StateID sID, int mID)
     {
-        GameObject model = c_ModelCtrl.GetModelResource(CurMainModelID);
-        if (!model)
+        GameObject model = sID == StateID.StartState? null : c_ModelCtrl.GetModelResource(mID);
+        if (sID != StateID.StartState && !model)
         {
             MyDebug.LogYellow("Can Not Get Model!!!");
             return;
         }
-        c_GuiCtrl.SwitchWrapper((GuiFrameID)CurStateID);
-        c_StateCtrl.SwitchState(CurStateID, model);
+        c_GuiCtrl.SwitchWrapper((GuiFrameID)sID);
+        c_StateCtrl.SwitchState(sID, model);
     }
     /// <summary>
     /// 切换主模型
     /// </summary>
-    public void SwitchMainModel()
+    public void SwitchMainModel(int mID)
     {
-        GameObject model = c_ModelCtrl.GetModelResource(CurMainModelID);
+        GameObject model = c_ModelCtrl.GetModelResource(mID);
         if (!model)
         {
             MyDebug.LogYellow("Can Not Get Main Model!!!");
@@ -140,9 +127,9 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 切换副模型
     /// </summary>
-    public void SwitchViceModel()
+    public void SwitchViceModel(int mID)
     {
-        GameObject model = c_ModelCtrl.GetModelResource(CurViceModelID);
+        GameObject model = c_ModelCtrl.GetModelResource(mID);
         if (!model)
         {
             MyDebug.LogYellow("Can Not Get Vice Model!!!");
@@ -166,7 +153,8 @@ public class GameManager : MonoBehaviour
     /// <param name="angle"></param>
     public void SetMainCameraAngle(float angle)
     {
-
+        float angleX = (maxCameraAngel - minCameraAngel) * angle + minCameraAngel;
+        mainCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
     }
     /// <summary>
     /// 设置副摄像机角度
@@ -174,7 +162,8 @@ public class GameManager : MonoBehaviour
     /// <param name="angle"></param>
     public void SetViceCameraAngle(float angle)
     {
-
+        float angleX = (maxCameraAngel - minCameraAngel) * angle + minCameraAngel;
+        viceCamera.transform.eulerAngles = new Vector3(angleX, 0, 0);
     }
     /// <summary>
     /// 重置状态
