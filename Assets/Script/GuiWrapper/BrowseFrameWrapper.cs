@@ -14,7 +14,7 @@ public class BrowseFrameWrapper : GuiFrameWrapper
     void Start()
     {
         id = GuiFrameID.BrowseFrameWrapper;
-        tempModelID = 0;
+        tempModelID = GameManager.Instance.MainModelID;
         Init();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
         RefreshDropdown(modelDropdownInBrowse, dropDownOptions);
@@ -36,7 +36,7 @@ public class BrowseFrameWrapper : GuiFrameWrapper
         }
         dpd.ClearOptions();
         dpd.AddOptions(dropDownOptions);
-        dpd.value = 0;
+        dpd.value = tempModelID;
         dpd.RefreshShownValue();
     }
 

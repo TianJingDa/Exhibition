@@ -17,7 +17,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
     void Start()
     {
         id = GuiFrameID.CompareFrameWrapper;
-        tempMainModelID = 0;
+        tempMainModelID = GameManager.Instance.MainModelID;
         Init();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
         RefreshDropdown(mainModelDropdownInCompare, dropDownOptions);
@@ -41,7 +41,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
         }
         dpd.ClearOptions();
         dpd.AddOptions(dropDownOptions);
-        dpd.value = 0;
+        dpd.value = tempMainModelID;
         dpd.RefreshShownValue();
     }
 

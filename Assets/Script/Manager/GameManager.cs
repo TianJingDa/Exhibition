@@ -21,6 +21,17 @@ public class GameManager : MonoBehaviour
     private GameObject              mainCamera;             //主摄像机
     private GameObject              viceCamera;             //副摄像机
 
+    public int MainModelID//主模型的ID
+    {
+        get;
+        private set;
+    }
+
+    public Transform Player//漫游模式中控制的物体
+    {
+        get;
+        private set;
+    }
 
     public static GameManager Instance//单例
     {
@@ -108,6 +119,17 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("Can Not Get Model!!!");
             return;
         }
+        if (sID == StateID.RoamState)
+        {
+            Player = model.transform.FindChild("Player");
+            if (!Player)
+            {
+                MyDebug.LogYellow("Can Not Find Player!!!");
+                return;
+            }
+            Player.gameObject.SetActive(true);
+        }
+        MainModelID = mID;
         c_GuiCtrl.SwitchWrapper((GuiFrameID)sID);
         c_StateCtrl.SwitchState(sID, model);
     }
@@ -122,7 +144,20 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("Can Not Get Main Model!!!");
             return;
         }
+        Player = model.transform.FindChild("Player");
+        StateID sID = c_StateCtrl.GetCurStateID();
+        if (sID == StateID.RoamState)
+        {
+            Player = model.transform.FindChild("Player");
+            if (!Player)
+            {
+                MyDebug.LogYellow("Can Not Find Player!!!");
+                return;
+            }
+            Player.gameObject.SetActive(true);
+        }
         c_StateCtrl.SwitchMainModel(model);
+        MainModelID = mID;
     }
     /// <summary>
     /// 切换副模型

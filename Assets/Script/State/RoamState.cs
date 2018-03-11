@@ -17,22 +17,29 @@ public class RoamState : State
     }
     #endregion
 
+    private Vector3 playerPostiion;     //起始位置
+    private Vector3 playerAngle;        //起始角度
 
     public override void Enter(GameObject model = null)
     {
-        GameManager.Instance.SetCameraActive(true, false);
+        GameManager.Instance.SetCameraActive(false, false);
         curMainModel = model;
+        playerPostiion = GameManager.Instance.Player.position;
+        playerAngle = GameManager.Instance.Player.eulerAngles;
         Reset();
     }
 
     public override void Exit()
     {
+        Object.Destroy(curMainModel);
     }
 
     public override void SwitchMainModel(GameObject model)
     {
         Object.Destroy(curMainModel);
         curMainModel = model;
+        playerPostiion = GameManager.Instance.Player.position;
+        playerAngle = GameManager.Instance.Player.eulerAngles;
         Reset();
     }
 
@@ -42,8 +49,7 @@ public class RoamState : State
 
     public override void Reset()
     {
-        curMainModel.transform.position = Vector3.zero;
-        curMainModel.transform.rotation = Quaternion.identity;
-        GameManager.Instance.SetMainCameraAngle(0);
+        GameManager.Instance.Player.position = playerPostiion;
+        GameManager.Instance.Player.eulerAngles = playerAngle;
     }
 }
