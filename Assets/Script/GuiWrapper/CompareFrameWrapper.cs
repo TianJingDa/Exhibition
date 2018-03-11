@@ -20,8 +20,8 @@ public class CompareFrameWrapper : GuiFrameWrapper
         tempMainModelID = GameManager.Instance.MainModelID;
         Init();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
-        RefreshDropdown(mainModelDropdownInCompare, dropDownOptions);
-        RefreshDropdown(viceModelDropdownInCompare, dropDownOptions);
+        RefreshDropdown(mainModelDropdownInCompare, dropDownOptions, tempMainModelID);
+        RefreshDropdown(viceModelDropdownInCompare, dropDownOptions, 0);
     }
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
@@ -32,7 +32,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
         angleSliderInBrowse = gameObjectDict["AngleSliderInBrowse"].GetComponent<Slider>();
     }
 
-    private void RefreshDropdown(Dropdown dpd, List<string> dropDownOptions)
+    private void RefreshDropdown(Dropdown dpd, List<string> dropDownOptions, int modelID)
     {
         if (!dpd)
         {
@@ -41,7 +41,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
         }
         dpd.ClearOptions();
         dpd.AddOptions(dropDownOptions);
-        dpd.value = tempMainModelID;
+        dpd.value = modelID;
         dpd.RefreshShownValue();
     }
 
