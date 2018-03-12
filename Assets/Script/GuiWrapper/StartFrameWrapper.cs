@@ -9,7 +9,7 @@ public class StartFrameWrapper : GuiFrameWrapper
     private int tempStateID;//所选的模式
 
     private GameObject computerContent;
-    private GameObject shareContent;
+    private GameObject shareContentBg;
     private Dropdown modelDropdown;
     private Dropdown stateDropdown;
 
@@ -27,7 +27,7 @@ public class StartFrameWrapper : GuiFrameWrapper
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
         computerContent     = gameObjectDict["ComputerContent"];
-        shareContent        = gameObjectDict["ShareContent"];
+        shareContentBg      = gameObjectDict["ShareContentBg"];
         modelDropdown       = gameObjectDict["ModelDropdown"].GetComponent<Dropdown>();
         stateDropdown       = gameObjectDict["StateDropdown"].GetComponent<Dropdown>();
     }
@@ -78,7 +78,8 @@ public class StartFrameWrapper : GuiFrameWrapper
                 computerContent.SetActive(!computerContent.activeSelf);
                 break;
             case "ShareBtn":
-                shareContent.SetActive(!shareContent.activeSelf);
+            case "ShareContentBg":
+                shareContentBg.SetActive(!shareContentBg.activeSelf);
                 break;
             case "WeChatBtn":
                 break;

@@ -48,16 +48,17 @@ public class ModelGesture : MonoBehaviour
         // Pinch
         if (current.type == EasyTouch.EvtType.On_Pinch)
         {
-            if (current.deltaPinch > 0 && (transform.localScale.x > maxScale * initScale.x
-            ||  transform.localScale.y > maxScale * initScale.y
-            ||  transform.localScale.z > maxScale * initScale.z))
+            Vector3 scale = transform.localScale + Vector3.one * current.deltaPinch * Time.deltaTime * pinchSensibility;
+            if (scale.x > maxScale * initScale.x
+            || scale.y > maxScale * initScale.y
+            || scale.z > maxScale * initScale.z)
             {
                 transform.localScale = maxScale * initScale;
                 return;
             }
-            if (current.deltaPinch < 0 && (transform.localScale.x < minScale * initScale.x
-            || transform.localScale.y < minScale * initScale.y
-            || transform.localScale.z < minScale * initScale.z))
+            if (scale.x < minScale * initScale.x
+            || scale.y < minScale * initScale.y
+            || scale.z < minScale * initScale.z)
             {
                 transform.localScale = minScale * initScale;
                 return;
