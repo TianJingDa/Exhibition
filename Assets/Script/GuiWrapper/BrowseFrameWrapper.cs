@@ -8,6 +8,7 @@ public class BrowseFrameWrapper : GuiFrameWrapper
     private int tempModelID;//所选的户型
 
     private GameObject modelSwitchContentInBrowse;
+    private GameObject detailScrollViewBgInBrowse;
     private Dropdown modelDropdownInBrowse;
     private Slider angleSliderInBrowse;
 
@@ -22,9 +23,10 @@ public class BrowseFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        modelSwitchContentInBrowse = gameObjectDict["ModelSwitchContentInBrowse"];
-        modelDropdownInBrowse = gameObjectDict["ModelDropdownInBrowse"].GetComponent<Dropdown>();
-        angleSliderInBrowse = gameObjectDict["AngleSliderInBrowse"].GetComponent<Slider>();
+        modelSwitchContentInBrowse      = gameObjectDict["ModelSwitchContentInBrowse"];
+        detailScrollViewBgInBrowse      = gameObjectDict["DetailScrollViewBgInBrowse"];
+        modelDropdownInBrowse           = gameObjectDict["ModelDropdownInBrowse"].GetComponent<Dropdown>();
+        angleSliderInBrowse             = gameObjectDict["AngleSliderInBrowse"].GetComponent<Slider>();
     }
 
     private void RefreshDropdown(Dropdown dpd, List<string> dropDownOptions)
@@ -64,6 +66,10 @@ public class BrowseFrameWrapper : GuiFrameWrapper
             case "ResetBtnInBrowse":
                 angleSliderInBrowse.value = 0;
                 GameManager.Instance.ResetState();
+                break;
+            case "DetailBtnInBrowse":
+            case "DetailScrollViewBgInBrowse":
+                detailScrollViewBgInBrowse.SetActive(!detailScrollViewBgInBrowse.activeSelf);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

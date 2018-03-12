@@ -143,38 +143,43 @@ public class UITool : Editor
     [MenuItem("Custom Editor/生成模型表")]
     public static void MakeModelJson()
     {
-        StreamReader modelAsset = new StreamReader(Application.dataPath + "/Model.txt");
+        string addressList = Application.dataPath + "/Model.txt";
+        string targetList = Application.dataPath + "/Resources/Model/Model.txt";
+        StreamReader modelAsset = new StreamReader(addressList);
         if (modelAsset == null)
         {
-            MyDebug.LogYellow("Can not find Model.txt !!");
+            MyDebug.LogYellow("Can not find: " + addressList);
             return;
         }
-        Dictionary<string, string> modelDict = new Dictionary<string, string>();
         char[] charSeparators = new char[] { "\r"[0], "\n"[0] };
         string asset = modelAsset.ReadToEnd();
         string[] lineArray = asset.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries);
-        List<string> lineList;
-        for (int i = 1; i < lineArray.Length; i++)
+        string[] lineList;
+        List<ModelInstance> modelList = new List<ModelInstance>();
+        for (int j = 1; j < lineArray.Length; j++)
         {
-            lineList = new List<string>(lineArray[i].Split(','));
-            modelDict.Add(lineList[0], lineList[lineList.Count - 1]);
+            ModelInstance instance = new ModelInstance();
+            lineList = lineArray[j].Split(',');
+            instance.index = lineList[0];
+            instance.name = lineList[1];
+            instance.image = lineList[2];
+            modelList.Add(instance);
         }
-        string path = Application.dataPath + "/Resources/Model/Model.txt";
-        if (File.Exists(path)) File.Delete(path);
-        IOHelper.SetData(path, modelDict);
+        if (File.Exists(targetList)) File.Delete(targetList);
+        IOHelper.SetData(targetList, modelList);
     }
 
-    [MenuItem("Custom Editor/转换prefab/Default")]
+    [MenuItem("Custom Editor/转换prefab")]
     public static void DefaultPrefab()
     {
-        string spriteDir = Application.dataPath + "/Resources/Skin/Default";
+        string spriteDir = Application.dataPath + "/Resources/Image";
 
         if (!Directory.Exists(spriteDir))
         {
             Directory.CreateDirectory(spriteDir);
         }
 
-        DirectoryInfo rootDirInfo = new DirectoryInfo(Application.dataPath + "/Image/Default");
+        DirectoryInfo rootDirInfo = new DirectoryInfo(Application.dataPath + "/Image");
         foreach (DirectoryInfo dirInfo in rootDirInfo.GetDirectories())
         {
             foreach (FileInfo pngFile in dirInfo.GetFiles("*.png", SearchOption.AllDirectories))
@@ -222,10 +227,10 @@ public class UITool : Editor
     }
 
 
-    [MenuItem("Assets/转换prefab-Default")]
+    [MenuItem("Assets/转换prefab")]
     public static void AssetsDefaultPrefab()
     {
-        string spriteDir = Application.dataPath + "/Resources/Skin/Default";
+        string spriteDir = Application.dataPath + "/Resources/Image";
 
         if (!Directory.Exists(spriteDir))
         {

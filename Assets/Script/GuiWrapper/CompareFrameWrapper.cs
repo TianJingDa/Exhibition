@@ -9,9 +9,10 @@ public class CompareFrameWrapper : GuiFrameWrapper
     //private int tempViceModelID;//所选的副户型
 
     private GameObject modelSwitchContentInCompare;
+    private GameObject detailScrollViewBgInCompare;
     private Dropdown mainModelDropdownInCompare;
     private Dropdown viceModelDropdownInCompare;
-    private Slider angleSliderInBrowse;
+    private Slider angleSliderInCompare;
 
 
     void Start()
@@ -26,10 +27,11 @@ public class CompareFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        modelSwitchContentInCompare = gameObjectDict["ModelSwitchContentInCompare"];
-        mainModelDropdownInCompare = gameObjectDict["MainModelDropdownInCompare"].GetComponent<Dropdown>();
-        viceModelDropdownInCompare = gameObjectDict["ViceModelDropdownInCompare"].GetComponent<Dropdown>();
-        angleSliderInBrowse = gameObjectDict["AngleSliderInBrowse"].GetComponent<Slider>();
+        modelSwitchContentInCompare         = gameObjectDict["ModelSwitchContentInCompare"];
+        detailScrollViewBgInCompare         = gameObjectDict["DetailScrollViewBgInCompare"];
+        mainModelDropdownInCompare          = gameObjectDict["MainModelDropdownInCompare"].GetComponent<Dropdown>();
+        viceModelDropdownInCompare          = gameObjectDict["ViceModelDropdownInCompare"].GetComponent<Dropdown>();
+        angleSliderInCompare                = gameObjectDict["AngleSliderInCompare"].GetComponent<Slider>();
     }
 
     private void RefreshDropdown(Dropdown dpd, List<string> dropDownOptions, int modelID)
@@ -62,7 +64,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
                 modelSwitchContentInCompare.SetActive(false);
                 break;
             case "ResetBtnInCompare":
-                angleSliderInBrowse.value = 0;
+                angleSliderInCompare.value = 0;
                 GameManager.Instance.ResetState();
                 break;
             case "BrowseStateBtnInCompare":
@@ -70,6 +72,11 @@ public class CompareFrameWrapper : GuiFrameWrapper
                 break;
             case "RoamStateBtnInCompare":
                 GameManager.Instance.SwitchStateAndModel(StateID.RoamState, tempMainModelID);
+                break;
+            case "MainDetailBtnInCompare":
+            case "ViceDetailBtnInCompare":
+            case "DetailScrollViewBgInCompare":
+                detailScrollViewBgInCompare.SetActive(!detailScrollViewBgInCompare.activeSelf);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

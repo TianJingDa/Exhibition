@@ -10,6 +10,7 @@ public class RoamFrameWrapper : GuiFrameWrapper
     private int tempModelID;//所选的户型
 
     private GameObject modelSwitchContentInRoam;
+    private GameObject detailScrollViewBgInRoam;
     private Dropdown modelDropdownInRoam;
 
     private ETCJoystick joystickLeft;
@@ -27,10 +28,11 @@ public class RoamFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
-        modelSwitchContentInRoam = gameObjectDict["ModelSwitchContentInRoam"];
-        modelDropdownInRoam = gameObjectDict["ModelDropdownInRoam"].GetComponent<Dropdown>();
-        joystickLeft = gameObjectDict["JoystickLeft"].GetComponent<ETCJoystick>();
-        joystickRight = gameObjectDict["JoystickRight"].GetComponent<ETCJoystick>();
+        modelSwitchContentInRoam    = gameObjectDict["ModelSwitchContentInRoam"];
+        detailScrollViewBgInRoam    = gameObjectDict["DetailScrollViewBgInRoam"];
+        modelDropdownInRoam         = gameObjectDict["ModelDropdownInRoam"].GetComponent<Dropdown>();
+        joystickLeft                = gameObjectDict["JoystickLeft"].GetComponent<ETCJoystick>();
+        joystickRight               = gameObjectDict["JoystickRight"].GetComponent<ETCJoystick>();
     }
 
     private void RefreshDropdown(Dropdown dpd, List<string> dropDownOptions)
@@ -68,6 +70,10 @@ public class RoamFrameWrapper : GuiFrameWrapper
                 break;
             case "ResetBtnInRoam":
                 GameManager.Instance.ResetState();
+                break;
+            case "DetailBtnInRoam":
+            case "DetailScrollViewBgInRoam":
+                detailScrollViewBgInRoam.SetActive(!detailScrollViewBgInRoam.activeSelf);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);

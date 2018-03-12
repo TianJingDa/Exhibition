@@ -12,13 +12,17 @@ Text_10001,模式,TJD
 Text_10002,重置,TJD
 Text_10003,对比模式,TJD
 Text_10004,漫游模式,TJD
+Text_10005,详情,TJD
 Text_20000,返回,TJD
 Text_20001,模式,TJD
 Text_20002,重置,TJD
 Text_20003,浏览模式,TJD
 Text_20004,漫游模式,TJD
+Text_20005,详情,TJD
+Text_20006,详情,TJD
 Text_30000,返回,TJD
 Text_30001,模式,TJD
 Text_30002,重置,TJD
 Text_30003,浏览模式,TJD
 Text_30004,对比模式,TJD
+Text_30005,详情,TJD

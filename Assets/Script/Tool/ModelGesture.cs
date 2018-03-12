@@ -35,10 +35,8 @@ public class ModelGesture : MonoBehaviour
         // Swipe
         if (current.type == EasyTouch.EvtType.On_Swipe && current.touchCount == 1)
         {
-            horizontal = transform.InverseTransformDirection(Vector3.right);
-            vertical = transform.InverseTransformDirection(Vector3.forward);
-            transform.Translate(horizontal * current.deltaPosition.x / Screen.width * swipeSensibility);
-            transform.Translate(vertical * current.deltaPosition.y / Screen.height * swipeSensibility);
+            transform.Translate(Vector3.right * current.deltaPosition.x / Screen.width * swipeSensibility, Space.World);
+            transform.Translate(Vector3.forward * current.deltaPosition.y / Screen.height * swipeSensibility, Space.World);
         }
 
         // Twist

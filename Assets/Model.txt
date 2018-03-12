@@ -1,4 +1,4 @@
-Index,Name
-0,测试户型一
-1,测试户型二
-2,测试户型三
+Index,Name,Image
+0,测试户型一,Image_40000
+1,测试户型二,Image_40001
+2,测试户型三,Image_40002

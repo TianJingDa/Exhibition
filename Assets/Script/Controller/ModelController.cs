@@ -20,7 +20,7 @@ public class ModelController : Controller
     /// <summary>
     /// 模型字典，key是模型枚举，value是模型地址
     /// </summary>
-    private Dictionary<string, string> modelDict;
+    private List<ModelInstance> modelList;
 
     /// <summary>
     /// 初始化模型字典
@@ -28,7 +28,7 @@ public class ModelController : Controller
     private void InitModelData()
     {
         string path = "Model/Model";
-        modelDict = (Dictionary<string, string>)IOHelper.GetDataFromResources(path, typeof(Dictionary<string, string>));
+        modelList = (List<ModelInstance>)IOHelper.GetDataFromResources(path, typeof(List<ModelInstance>));
     }
 
     public GameObject GetModelResource(int id)
@@ -39,7 +39,18 @@ public class ModelController : Controller
 
     public List<string> GetAllModelNames()
     {
-        return new List<string>(modelDict.Values);
+        List<string> nameList = new List<string>();
+        for(int i = 0; i < modelList.Count; i++)
+        {
+            nameList.Add(modelList[i].name);
+        }
+        return nameList;
     }
-
+}
+[System.Serializable]
+public class ModelInstance
+{
+    public string index;
+    public string name;
+    public string image;
 }

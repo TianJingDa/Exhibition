@@ -399,7 +399,7 @@ public class EasyTouch : MonoBehaviour {
 		twoFingerPickMethod = TwoFingerPickMethod.Finger;
 		enable2FingersSwipe = true;
 		enablePinch = true;
-		minPinchLength = 25f;
+		minPinchLength = 30f;
 		enableTwist = true;
 		minTwistAngle = 1f;
 

@@ -8,6 +8,8 @@ public class StartFrameWrapper : GuiFrameWrapper
     private int tempModelID;//所选的户型
     private int tempStateID;//所选的模式
 
+    private GameObject computerContent;
+    private GameObject shareContent;
     private Dropdown modelDropdown;
     private Dropdown stateDropdown;
 
@@ -24,6 +26,8 @@ public class StartFrameWrapper : GuiFrameWrapper
 
     protected override void OnStart(Dictionary<string, GameObject> gameObjectDict)
     {
+        computerContent     = gameObjectDict["ComputerContent"];
+        shareContent        = gameObjectDict["ShareContent"];
         modelDropdown       = gameObjectDict["ModelDropdown"].GetComponent<Dropdown>();
         stateDropdown       = gameObjectDict["StateDropdown"].GetComponent<Dropdown>();
     }
@@ -69,11 +73,18 @@ public class StartFrameWrapper : GuiFrameWrapper
             case "StartBtn":
                 GameManager.Instance.SwitchStateAndModel((StateID)tempStateID, tempModelID);
                 break;
-            case "ComputeBtn":
-                MyDebug.LogGreen("ComputeBtn");
+            case "ComputerBtn":
+            case "ComputerContent":
+                computerContent.SetActive(!computerContent.activeSelf);
                 break;
-            case "2DCodeBtn":
-                MyDebug.LogGreen("2DCodeBtn");
+            case "ShareBtn":
+                shareContent.SetActive(!shareContent.activeSelf);
+                break;
+            case "WeChatBtn":
+                break;
+            case "WeChatMomentsBtn":
+                break;
+            case "SinaWeiboBtn":
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
