@@ -46,6 +46,12 @@ public class ModelController : Controller
         }
         return nameList;
     }
+
+    public string GetModelDetailImage(int id)
+    {
+        ModelInstance instance = modelList.Find(x => x.index == id.ToString());
+        return instance.image;
+    }
 }
 [System.Serializable]
 public class ModelInstance

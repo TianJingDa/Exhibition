@@ -20,11 +20,9 @@ public class BrowseState : State
     public override void Enter(GameObject model = null)
     {
         GameManager.Instance.SetCameraActive(true, false);
-        curMainModel = model;
         initMainEulerAngles = model.transform.eulerAngles;
         initMainScale = model.transform.localScale;
-        curMainModel.AddComponent<ModelGesture>();
-        Reset();
+        SwitchMainModel(model);
     }
 
     public override void Exit()
@@ -50,5 +48,10 @@ public class BrowseState : State
         curMainModel.transform.eulerAngles = initMainEulerAngles;
         curMainModel.transform.localScale = initMainScale;
         GameManager.Instance.SetMainCameraAngle(0);
+    }
+
+    public override void SetModelActive(bool bMainModel, bool bViceModel)
+    {
+        curMainModel.SetActive(bMainModel);
     }
 }

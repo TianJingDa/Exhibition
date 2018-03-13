@@ -27,4 +27,6 @@ public abstract class State
     public abstract void SwitchMainModel(GameObject model);     //刷新主屏幕模型
 
     public abstract void SwitchViceModel(GameObject model);     //刷新副屏幕模型
+
+    public abstract void SetModelActive(bool bMainModel, bool bViceModel); //设置主副模型的显示和隐藏
 }

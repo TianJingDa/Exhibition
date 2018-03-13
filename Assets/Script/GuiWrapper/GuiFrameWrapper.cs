@@ -11,6 +11,11 @@ public abstract class GuiFrameWrapper : MonoBehaviour
     [HideInInspector]
     public GuiFrameID id;
 
+    protected int maxScale = 2;
+    protected int minScale = 1;
+    protected float pinchSensibility = 0.05f;
+    protected bool enableDoubleTap = true;
+
     protected GameObject hidePanel;
 
     private delegate void ButtonDelegate(Button btn);
@@ -20,7 +25,7 @@ public abstract class GuiFrameWrapper : MonoBehaviour
 
     void Update()
     {
-        if (hidePanel && EasyTouch.current.type == EasyTouch.EvtType.On_DoubleTap)
+        if (enableDoubleTap && hidePanel && EasyTouch.current.type == EasyTouch.EvtType.On_DoubleTap)
             hidePanel.SetActive(!hidePanel.activeSelf);
     }
 

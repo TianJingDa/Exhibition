@@ -71,4 +71,9 @@ public class StateController : Controller
     {
         return curState.id;
     }
+
+    public void SetModelActive(bool bMainModel, bool bViceModel)
+    {
+        curState.SetModelActive(bMainModel, bViceModel);
+    }
 }

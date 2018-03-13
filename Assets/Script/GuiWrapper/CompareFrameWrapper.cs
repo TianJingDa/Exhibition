@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HedgehogTeam.EasyTouch;
 
 public class CompareFrameWrapper : GuiFrameWrapper
 {
-    private int tempMainModelID;//所选的主户型
+    //private int tempMainModelID;//所选的主户型
     //private int tempViceModelID;//所选的副户型
 
     private GameObject modelSwitchContentInCompare;
     private GameObject detailScrollViewBgInCompare;
+    private GameObject detailScrollViewInCompare;
+    private GameObject detailImageInCompare;
+    private ScrollRect detailScrollRect;
+    private Mask detailScrollMask;
     private Dropdown mainModelDropdownInCompare;
     private Dropdown viceModelDropdownInCompare;
     private Slider angleSliderInCompare;
@@ -18,10 +23,11 @@ public class CompareFrameWrapper : GuiFrameWrapper
     void Start()
     {
         id = GuiFrameID.CompareFrameWrapper;
-        tempMainModelID = GameManager.Instance.MainModelID;
         Init();
+        detailScrollRect = detailScrollViewInCompare.GetComponent<ScrollRect>();
+        detailScrollMask = detailScrollViewInCompare.GetComponent<Mask>();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
-        RefreshDropdown(mainModelDropdownInCompare, dropDownOptions, tempMainModelID);
+        RefreshDropdown(mainModelDropdownInCompare, dropDownOptions, GameManager.Instance.MainModelID);
         RefreshDropdown(viceModelDropdownInCompare, dropDownOptions, 0);
     }
 
@@ -29,6 +35,8 @@ public class CompareFrameWrapper : GuiFrameWrapper
     {
         modelSwitchContentInCompare         = gameObjectDict["ModelSwitchContentInCompare"];
         detailScrollViewBgInCompare         = gameObjectDict["DetailScrollViewBgInCompare"];
+        detailScrollViewInCompare           = gameObjectDict["DetailScrollViewInCompare"];
+        detailImageInCompare                = gameObjectDict["DetailImageInCompare"];
         mainModelDropdownInCompare          = gameObjectDict["MainModelDropdownInCompare"].GetComponent<Dropdown>();
         viceModelDropdownInCompare          = gameObjectDict["ViceModelDropdownInCompare"].GetComponent<Dropdown>();
         angleSliderInCompare                = gameObjectDict["AngleSliderInCompare"].GetComponent<Slider>();
@@ -55,7 +63,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Compare2StartBtn":
-                GameManager.Instance.SwitchStateAndModel(StateID.StartState, -1);
+                GameManager.Instance.SwitchStateAndModel(StateID.StartState);
                 break;
             case "ModelSwitchBtnInCompare":
                 modelSwitchContentInCompare.SetActive(!modelSwitchContentInCompare.activeSelf);
@@ -68,15 +76,37 @@ public class CompareFrameWrapper : GuiFrameWrapper
                 GameManager.Instance.ResetState();
                 break;
             case "BrowseStateBtnInCompare":
-                GameManager.Instance.SwitchStateAndModel(StateID.BrowseState, tempMainModelID);
+                GameManager.Instance.SwitchStateAndModel(StateID.BrowseState);
                 break;
             case "RoamStateBtnInCompare":
-                GameManager.Instance.SwitchStateAndModel(StateID.RoamState, tempMainModelID);
+                GameManager.Instance.SwitchStateAndModel(StateID.RoamState);
                 break;
             case "MainDetailBtnInCompare":
+                enableDoubleTap = false;
+                GameManager.Instance.SetModelActive(false, false);
+                detailScrollViewBgInCompare.SetActive(true);
+                detailScrollRect.horizontal = false;
+                detailScrollMask.enabled = true;
+                detailImageInCompare.transform.localScale = Vector3.one * minScale;
+                detailImageInCompare.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                Sprite mainSprite = GameManager.Instance.GetMainDetailSprite();
+                CommonTool.AdjustContent(detailImageInCompare.GetComponent<Image>(), mainSprite);
+                break;
             case "ViceDetailBtnInCompare":
+                enableDoubleTap = false;
+                GameManager.Instance.SetModelActive(false, false);
+                detailScrollViewBgInCompare.SetActive(true);
+                detailScrollRect.horizontal = false;
+                detailScrollMask.enabled = true;
+                detailImageInCompare.transform.localScale = Vector3.one * minScale;
+                detailImageInCompare.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                Sprite viceSprite = GameManager.Instance.GetViceDetailSprite();
+                CommonTool.AdjustContent(detailImageInCompare.GetComponent<Image>(), viceSprite);
+                break;
             case "DetailScrollViewBgInCompare":
-                detailScrollViewBgInCompare.SetActive(!detailScrollViewBgInCompare.activeSelf);
+                enableDoubleTap = true;
+                GameManager.Instance.SetModelActive(true, true);
+                detailScrollViewBgInCompare.SetActive(false);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -91,8 +121,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
         switch (dpd.name)
         {
             case "MainModelDropdownInCompare":
-                tempMainModelID = dpd.value;
-                GameManager.Instance.SwitchMainModel(tempMainModelID);
+                GameManager.Instance.SwitchMainModel(dpd.value);
                 break;
             case "ViceModelDropdownInCompare":
                 GameManager.Instance.SwitchViceModel(dpd.value);
@@ -109,7 +138,7 @@ public class CompareFrameWrapper : GuiFrameWrapper
 
         switch (sld.name)
         {
-            case "AngleSliderInBrowse":
+            case "AngleSliderInCompare":
                 GameManager.Instance.SetCameraAngel(sld.value);
                 break;
             default:
@@ -117,5 +146,46 @@ public class CompareFrameWrapper : GuiFrameWrapper
                 break;
         }
     }
+
+    public void OnDoubleTap(Gesture gesture)
+    {
+        if (detailImageInCompare.transform.localScale != Vector3.one * minScale)
+        {
+            detailImageInCompare.transform.localScale = Vector3.one * minScale;
+            detailScrollRect.horizontal = false;
+            detailScrollMask.enabled = true;
+            detailImageInCompare.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
+        else
+        {
+            detailImageInCompare.transform.localScale = Vector3.one * maxScale;
+            detailScrollRect.horizontal = true;
+            detailScrollMask.enabled = false;
+        }
+    }
+
+    public void OnPinch(Gesture gesture)
+    {
+        Vector3 scale = detailImageInCompare.transform.localScale + Vector3.one * gesture.deltaPinch * Time.deltaTime * pinchSensibility;
+        if (scale.x > maxScale || scale.y > maxScale || scale.z > maxScale)
+        {
+            detailImageInCompare.transform.localScale = maxScale * Vector3.one;
+            return;
+        }
+        if (scale.x < minScale || scale.y < minScale || scale.z < minScale)
+        {
+            detailImageInCompare.transform.localScale = minScale * Vector3.one;
+            return;
+        }
+        detailImageInCompare.transform.localScale = scale;
+    }
+
+    public void OnPinchEnd(Gesture gesture)
+    {
+        bool isMinScale = detailImageInCompare.transform.localScale == Vector3.one * minScale;
+        detailScrollRect.horizontal = !isMinScale;
+        detailScrollMask.enabled = isMinScale;
+    }
+
 
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,6 +35,10 @@ public class StartState : State
     }
 
     public override void Reset()
+    {
+    }
+
+    public override void SetModelActive(bool bMainModel, bool bViceModel)
     {
     }
 }

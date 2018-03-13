@@ -20,18 +20,15 @@ public class CompareState : State
     public override void Enter(GameObject model = null)
     {
         GameManager.Instance.SetCameraActive(true, true);
-        curMainModel = model;
-        curMainModel.tag = "MainModel";
-        curMainModel.AddComponent<ModelGesture>();
-        curViceModel = GameManager.Instance.GetModel(0);
-        curViceModel.tag = "ViceModel";
-        curViceModel.AddComponent<ModelGesture>();
-        initMainEulerAngles = curMainModel.transform.eulerAngles;
-        initMainScale = curMainModel.transform.localScale;
-        initViceEulerAngles = curViceModel.transform.eulerAngles;
-        initViceScale = curViceModel.transform.localScale;
+        GameObject viceModel = GameManager.Instance.GetModel(0);
+        initMainEulerAngles = model.transform.eulerAngles;
+        initMainScale = model.transform.localScale;
+        initViceEulerAngles = viceModel.transform.eulerAngles;
+        initViceScale = viceModel.transform.localScale;
+        SwitchMainModel(model);
+        SwitchViceModel(viceModel);
         GameManager.Instance.SetMainCameraViewport(new Rect(0, 0, 0.5f, 1));
-        Reset();
+        GameManager.Instance.SetCameraAngel(0);
     }
 
     public override void Exit()
@@ -78,6 +75,12 @@ public class CompareState : State
         curViceModel.transform.position = new Vector3(10000, 0, 0);
         curViceModel.transform.eulerAngles = initMainEulerAngles;
         curViceModel.transform.localScale = initMainScale;
+    }
+
+    public override void SetModelActive(bool bMainModel, bool bViceModel)
+    {
+        curMainModel.SetActive(bMainModel);
+        curViceModel.SetActive(bViceModel);
     }
 }
 

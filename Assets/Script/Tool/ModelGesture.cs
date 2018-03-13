@@ -11,8 +11,6 @@ public class ModelGesture : MonoBehaviour
     private float maxScale = 3;
     private float minScale = 0.5f;
     private Vector3 initScale;
-    private Vector3 horizontal;
-    private Vector3 vertical;
     private StateID curStateID;
 
     void Start()
@@ -63,7 +61,7 @@ public class ModelGesture : MonoBehaviour
                 transform.localScale = minScale * initScale;
                 return;
             }
-            transform.localScale += Vector3.one * current.deltaPinch * Time.deltaTime * pinchSensibility;
+            transform.localScale = scale;
         }
     }
 }

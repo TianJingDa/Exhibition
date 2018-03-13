@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HedgehogTeam.EasyTouch;
+
 
 public class BrowseFrameWrapper : GuiFrameWrapper
 {
-    private int tempModelID;//所选的户型
+    //private int tempModelID;//所选的户型
 
     private GameObject modelSwitchContentInBrowse;
     private GameObject detailScrollViewBgInBrowse;
+    private GameObject detailScrollViewInBrowse;
+    private GameObject detailImageInBrowse;
+    private ScrollRect detailScrollRect;
+    private Mask detailScrollMask;
     private Dropdown modelDropdownInBrowse;
     private Slider angleSliderInBrowse;
 
     void Start()
     {
         id = GuiFrameID.BrowseFrameWrapper;
-        tempModelID = GameManager.Instance.MainModelID;
         Init();
+        detailScrollRect = detailScrollViewInBrowse.GetComponent<ScrollRect>();
+        detailScrollMask = detailScrollViewInBrowse.GetComponent<Mask>();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
         RefreshDropdown(modelDropdownInBrowse, dropDownOptions);
     }
@@ -25,6 +32,8 @@ public class BrowseFrameWrapper : GuiFrameWrapper
     {
         modelSwitchContentInBrowse      = gameObjectDict["ModelSwitchContentInBrowse"];
         detailScrollViewBgInBrowse      = gameObjectDict["DetailScrollViewBgInBrowse"];
+        detailScrollViewInBrowse        = gameObjectDict["DetailScrollViewInBrowse"];
+        detailImageInBrowse             = gameObjectDict["DetailImageInBrowse"];
         modelDropdownInBrowse           = gameObjectDict["ModelDropdownInBrowse"].GetComponent<Dropdown>();
         angleSliderInBrowse             = gameObjectDict["AngleSliderInBrowse"].GetComponent<Slider>();
     }
@@ -38,7 +47,7 @@ public class BrowseFrameWrapper : GuiFrameWrapper
         }
         dpd.ClearOptions();
         dpd.AddOptions(dropDownOptions);
-        dpd.value = tempModelID;
+        dpd.value = GameManager.Instance.MainModelID;
         dpd.RefreshShownValue();
     }
 
@@ -49,7 +58,7 @@ public class BrowseFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Browse2StartBtn":
-                GameManager.Instance.SwitchStateAndModel(StateID.StartState,-1);
+                GameManager.Instance.SwitchStateAndModel(StateID.StartState);
                 break;
             case "HideModelSwitchBtn":
                 modelSwitchContentInBrowse.SetActive(false);
@@ -58,18 +67,30 @@ public class BrowseFrameWrapper : GuiFrameWrapper
                 modelSwitchContentInBrowse.SetActive(!modelSwitchContentInBrowse.activeSelf);
                 break;
             case "CompairStateBtnInBrowse":
-                GameManager.Instance.SwitchStateAndModel(StateID.CompareState, tempModelID);
+                GameManager.Instance.SwitchStateAndModel(StateID.CompareState);
                 break;
             case "RoamStateBtnInBrowse":
-                GameManager.Instance.SwitchStateAndModel(StateID.RoamState, tempModelID);
+                GameManager.Instance.SwitchStateAndModel(StateID.RoamState);
                 break;
             case "ResetBtnInBrowse":
                 angleSliderInBrowse.value = 0;
                 GameManager.Instance.ResetState();
                 break;
             case "DetailBtnInBrowse":
+                enableDoubleTap = false;
+                GameManager.Instance.SetModelActive(false);
+                detailScrollViewBgInBrowse.SetActive(true);
+                detailScrollRect.horizontal = false;
+                detailScrollMask.enabled = true;
+                detailImageInBrowse.transform.localScale = Vector3.one * minScale;
+                detailImageInBrowse.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                Sprite sprite = GameManager.Instance.GetMainDetailSprite();
+                CommonTool.AdjustContent(detailImageInBrowse.GetComponent<Image>(), sprite);
+                break;
             case "DetailScrollViewBgInBrowse":
-                detailScrollViewBgInBrowse.SetActive(!detailScrollViewBgInBrowse.activeSelf);
+                enableDoubleTap = true;
+                GameManager.Instance.SetModelActive(true);
+                detailScrollViewBgInBrowse.SetActive(false);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -84,8 +105,7 @@ public class BrowseFrameWrapper : GuiFrameWrapper
         switch (dpd.name)
         {
             case "ModelDropdownInBrowse":
-                tempModelID = dpd.value;
-                GameManager.Instance.SwitchMainModel(tempModelID);
+                GameManager.Instance.SwitchMainModel(dpd.value);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Dropdown:" + dpd.name);
@@ -108,4 +128,43 @@ public class BrowseFrameWrapper : GuiFrameWrapper
         }
     }
 
+    public void OnDoubleTap(Gesture gesture)
+    {
+        if (detailImageInBrowse.transform.localScale != Vector3.one * minScale)
+        {
+            detailImageInBrowse.transform.localScale = Vector3.one * minScale;
+            detailScrollRect.horizontal = false;
+            detailScrollMask.enabled = true;
+            detailImageInBrowse.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
+        else
+        {
+            detailImageInBrowse.transform.localScale = Vector3.one * maxScale;
+            detailScrollRect.horizontal = true;
+            detailScrollMask.enabled = false;
+        }
+    }
+
+    public void OnPinch(Gesture gesture)
+    {
+        Vector3 scale = detailImageInBrowse.transform.localScale + Vector3.one * gesture.deltaPinch * Time.deltaTime * pinchSensibility;
+        if (scale.x > maxScale || scale.y > maxScale || scale.z > maxScale)
+        {
+            detailImageInBrowse.transform.localScale = maxScale * Vector3.one;
+            return;
+        }
+        if (scale.x < minScale || scale.y < minScale || scale.z < minScale)
+        {
+            detailImageInBrowse.transform.localScale = minScale * Vector3.one;
+            return;
+        }
+        detailImageInBrowse.transform.localScale = scale;
+    }
+
+    public void OnPinchEnd(Gesture gesture)
+    {
+        bool isMinScale = detailImageInBrowse.transform.localScale == Vector3.one * minScale;
+        detailScrollRect.horizontal = !isMinScale;
+        detailScrollMask.enabled = isMinScale;
+    }
 }

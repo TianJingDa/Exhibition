@@ -223,4 +223,16 @@ public static class CommonTool
         }
     }
 
+    public static void AdjustContent(Image content, Sprite sprite)
+    {
+        float contentWidth = content.rectTransform.rect.width;
+        float imageWidth = sprite.rect.width;
+        float imageHeigh = sprite.rect.height;
+
+        float contentHeigh = imageHeigh * contentWidth / imageWidth;
+        content.rectTransform.offsetMin = new Vector2(0, -contentHeigh);
+
+        content.sprite = sprite;
+    }
 }
+

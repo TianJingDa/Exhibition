@@ -7,10 +7,15 @@ using HedgehogTeam.EasyTouch;
 
 public class RoamFrameWrapper : GuiFrameWrapper
 {
-    private int tempModelID;//所选的户型
+    //private int tempModelID;//所选的户型
 
     private GameObject modelSwitchContentInRoam;
     private GameObject detailScrollViewBgInRoam;
+    private GameObject detailScrollViewInRoam;
+    private GameObject detailImageInRoam;
+    private ScrollRect detailScrollRect;
+    private Mask detailScrollMask;
+
     private Dropdown modelDropdownInRoam;
 
     private ETCJoystick joystickLeft;
@@ -19,8 +24,9 @@ public class RoamFrameWrapper : GuiFrameWrapper
     void Start()
     {
         id = GuiFrameID.RoamFrameWrapper;
-        tempModelID = GameManager.Instance.MainModelID;
         Init();
+        detailScrollRect = detailScrollViewInRoam.GetComponent<ScrollRect>();
+        detailScrollMask = detailScrollViewInRoam.GetComponent<Mask>();
         List<string> dropDownOptions = GameManager.Instance.GetAllModelNames();
         RefreshDropdown(modelDropdownInRoam, dropDownOptions);
         RefreshPlayer();
@@ -30,6 +36,8 @@ public class RoamFrameWrapper : GuiFrameWrapper
     {
         modelSwitchContentInRoam    = gameObjectDict["ModelSwitchContentInRoam"];
         detailScrollViewBgInRoam    = gameObjectDict["DetailScrollViewBgInRoam"];
+        detailScrollViewInRoam      = gameObjectDict["DetailScrollViewInRoam"];
+        detailImageInRoam           = gameObjectDict["DetailImageInRoam"];
         modelDropdownInRoam         = gameObjectDict["ModelDropdownInRoam"].GetComponent<Dropdown>();
         joystickLeft                = gameObjectDict["JoystickLeft"].GetComponent<ETCJoystick>();
         joystickRight               = gameObjectDict["JoystickRight"].GetComponent<ETCJoystick>();
@@ -44,7 +52,7 @@ public class RoamFrameWrapper : GuiFrameWrapper
         }
         dpd.ClearOptions();
         dpd.AddOptions(dropDownOptions);
-        dpd.value = tempModelID;
+        dpd.value = GameManager.Instance.MainModelID;
         dpd.RefreshShownValue();
     }
     protected override void OnButtonClick(Button btn)
@@ -54,7 +62,7 @@ public class RoamFrameWrapper : GuiFrameWrapper
         switch (btn.name)
         {
             case "Roam2StartBtn":
-                GameManager.Instance.SwitchStateAndModel(StateID.StartState, -1);
+                GameManager.Instance.SwitchStateAndModel(StateID.StartState);
                 break;
             case "HideModelSwitchBtn":
                 modelSwitchContentInRoam.SetActive(false);
@@ -63,17 +71,29 @@ public class RoamFrameWrapper : GuiFrameWrapper
                 modelSwitchContentInRoam.SetActive(!modelSwitchContentInRoam.activeSelf);
                 break;
             case "BrowseStateBtnInRoam":                
-                GameManager.Instance.SwitchStateAndModel(StateID.BrowseState, tempModelID);
+                GameManager.Instance.SwitchStateAndModel(StateID.BrowseState);
                 break;
             case "CompareStateBtnInRoam":
-                GameManager.Instance.SwitchStateAndModel(StateID.CompareState, tempModelID);
+                GameManager.Instance.SwitchStateAndModel(StateID.CompareState);
                 break;
             case "ResetBtnInRoam":
                 GameManager.Instance.ResetState();
                 break;
             case "DetailBtnInRoam":
+                enableDoubleTap = false;
+                GameManager.Instance.SetModelActive(false);
+                detailScrollViewBgInRoam.SetActive(true);
+                detailScrollRect.horizontal = false;
+                detailScrollMask.enabled = true;
+                detailImageInRoam.transform.localScale = Vector3.one * minScale;
+                detailImageInRoam.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                Sprite sprite = GameManager.Instance.GetMainDetailSprite();
+                CommonTool.AdjustContent(detailImageInRoam.GetComponent<Image>(), sprite);
+                break;
             case "DetailScrollViewBgInRoam":
-                detailScrollViewBgInRoam.SetActive(!detailScrollViewBgInRoam.activeSelf);
+                enableDoubleTap = true;
+                GameManager.Instance.SetModelActive(true);
+                detailScrollViewBgInRoam.SetActive(false);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
@@ -88,8 +108,7 @@ public class RoamFrameWrapper : GuiFrameWrapper
         switch (dpd.name)
         {
             case "ModelDropdownInRoam":
-                tempModelID = dpd.value;
-                GameManager.Instance.SwitchMainModel(tempModelID);
+                GameManager.Instance.SwitchMainModel(dpd.value);
                 RefreshPlayer();
                 break;
             default:
@@ -121,4 +140,45 @@ public class RoamFrameWrapper : GuiFrameWrapper
         joystickRight.axisX.directTransform = player;
         joystickRight.axisY.directTransform = player.FindChild("Camera");
     }
+
+    public void OnDoubleTap(Gesture gesture)
+    {
+        if (detailImageInRoam.transform.localScale != Vector3.one * minScale)
+        {
+            detailImageInRoam.transform.localScale = Vector3.one * minScale;
+            detailScrollRect.horizontal = false;
+            detailScrollMask.enabled = true;
+            detailImageInRoam.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
+        else
+        {
+            detailImageInRoam.transform.localScale = Vector3.one * maxScale;
+            detailScrollRect.horizontal = true;
+            detailScrollMask.enabled = false;
+        }
+    }
+
+    public void OnPinch(Gesture gesture)
+    {
+        Vector3 scale = detailImageInRoam.transform.localScale + Vector3.one * gesture.deltaPinch * Time.deltaTime * pinchSensibility;
+        if (scale.x > maxScale || scale.y > maxScale || scale.z > maxScale)
+        {
+            detailImageInRoam.transform.localScale = maxScale * Vector3.one;
+            return;
+        }
+        if (scale.x < minScale || scale.y < minScale || scale.z < minScale)
+        {
+            detailImageInRoam.transform.localScale = minScale * Vector3.one;
+            return;
+        }
+        detailImageInRoam.transform.localScale = scale;
+    }
+
+    public void OnPinchEnd(Gesture gesture)
+    {
+        bool isMinScale = detailImageInRoam.transform.localScale == Vector3.one * minScale;
+        detailScrollRect.horizontal = !isMinScale;
+        detailScrollMask.enabled = isMinScale;
+    }
+
 }

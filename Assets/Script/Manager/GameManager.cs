@@ -27,6 +27,12 @@ public class GameManager : MonoBehaviour
         private set;
     }
 
+    public int ViceModelID//副模型的ID
+    {
+        get;
+        private set;
+    }
+
     public Transform Player//漫游模式中控制的物体
     {
         get;
@@ -111,8 +117,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="sID">状态ID</param>
     /// <param name="mID">模型ID</param>
-    public void SwitchStateAndModel(StateID sID, int mID)
+    public void SwitchStateAndModel(StateID sID, int mID = -1)
     {
+        if (mID < 0) mID = MainModelID;
+        else MainModelID = mID;
         GameObject model = sID == StateID.StartState? null : c_ModelCtrl.GetModelResource(mID);
         if (sID != StateID.StartState && !model)
         {
@@ -129,7 +137,7 @@ public class GameManager : MonoBehaviour
             }
             Player.gameObject.SetActive(true);
         }
-        MainModelID = mID;
+        if (sID == StateID.CompareState) ViceModelID = 0;
         c_GuiCtrl.SwitchWrapper((GuiFrameID)sID);
         c_StateCtrl.SwitchState(sID, model);
     }
@@ -171,6 +179,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         c_StateCtrl.SwitchViceModel(model);
+        ViceModelID = mID;
     }
     /// <summary>
     /// 设置摄像机的状态
@@ -228,5 +237,28 @@ public class GameManager : MonoBehaviour
     public StateID GetCurStateID()
     {
         return c_StateCtrl.GetCurStateID();
+    }
+    /// <summary>
+    /// 获取主模型的详情图片
+    /// </summary>
+    /// <returns></returns>
+    public Sprite GetMainDetailSprite()
+    {
+        string index = c_ModelCtrl.GetModelDetailImage(MainModelID);
+        return c_ImageCtrl.GetSpriteResource(index);
+    }
+    /// <summary>
+    /// 获取副模型的详情图片
+    /// </summary>
+    /// <returns></returns>
+    public Sprite GetViceDetailSprite()
+    {
+        string index = c_ModelCtrl.GetModelDetailImage(ViceModelID);
+        return c_ImageCtrl.GetSpriteResource(index);
+    }
+
+    public void SetModelActive(bool bMainModel, bool bViceModel = false)
+    {
+        c_StateCtrl.SetModelActive(bMainModel, bViceModel);
     }
 }

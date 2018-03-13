@@ -23,10 +23,7 @@ public class RoamState : State
     public override void Enter(GameObject model = null)
     {
         GameManager.Instance.SetCameraActive(false, false);
-        curMainModel = model;
-        playerPostiion = GameManager.Instance.Player.position;
-        playerAngle = GameManager.Instance.Player.eulerAngles;
-        Reset();
+        SwitchMainModel(model);
     }
 
     public override void Exit()
@@ -51,5 +48,10 @@ public class RoamState : State
     {
         GameManager.Instance.Player.position = playerPostiion;
         GameManager.Instance.Player.eulerAngles = playerAngle;
+    }
+
+    public override void SetModelActive(bool bMainModel, bool bViceModel)
+    {
+        curMainModel.SetActive(bMainModel);
     }
 }
