@@ -26,5 +26,5 @@ Text_30002,重置,TJD
 Text_30003,浏览模式,TJD
 Text_30004,对比模式,TJD
 Text_30005,详情,TJD
-Text_40000,XXX小区楼盘展示APP,TJD
-Text_40001,XXX小区楼盘展示APP,TJD
+Text_40000,楼盘展示软件,TJD
+Text_40001,楼盘展示软件,TJD
