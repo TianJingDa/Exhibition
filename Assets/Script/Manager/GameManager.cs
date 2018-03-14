@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using cn.sharesdk.unity3d;
 
 /// <summary>
 /// 游戏控制层
@@ -20,6 +21,8 @@ public class GameManager : MonoBehaviour
     private int                     maxCameraAngel;         //摄像机最大俯角
     private GameObject              mainCamera;             //主摄像机
     private GameObject              viceCamera;             //副摄像机
+    private ShareSDK                m_ShareSDK;             //用于分享成就和成绩
+
 
     public int MainModelID//主模型的ID
     {
@@ -70,6 +73,11 @@ public class GameManager : MonoBehaviour
 
         c_GuiCtrl.InitUI();
         c_StateCtrl.InitState();
+
+        m_ShareSDK = GetComponent<ShareSDK>();
+        m_ShareSDK.shareHandler = OnShareResultHandler;
+        InitShareIcon();
+
     }
     /// <summary>
     /// 获取多语言
@@ -261,4 +269,60 @@ public class GameManager : MonoBehaviour
     {
         c_StateCtrl.SetModelActive(bMainModel, bViceModel);
     }
+
+    public void ShareUrl(PlatformType type)
+    {
+        string title = GetMutiLanguage("Text_40000");
+        string description = GetMutiLanguage("Text_40001");
+        ShareContent content = new ShareContent();
+        content.SetImagePath(Application.persistentDataPath + "/Image/ShareIcon.png");
+        if (type == PlatformType.WeChatMoments || type == PlatformType.WeChat)
+        {
+            content.SetText(description);
+            content.SetTitle(title);
+            content.SetUrl("https://www.baidu.com");
+            content.SetShareType(ContentType.Webpage);
+        }
+        else if (type == PlatformType.SinaWeibo)
+        {
+            content.SetText(title + "https://www.baidu.com");//text是Url
+        }
+        m_ShareSDK.ShareContent(type, content);
+    }
+
+    private void InitShareIcon()
+    {
+        string path = Application.persistentDataPath + "/Image/ShareIcon.png";
+        if (!File.Exists(path)) StartCoroutine(AssetHelper.CopyImage("ShareIcon.png"));
+    }
+
+    /// <summary>
+    /// ShareSDK分享回调
+    /// </summary>
+    /// <param name="reqID"></param>
+    /// <param name="state"></param>
+    /// <param name="type"></param>
+    /// <param name="result"></param>
+    private void OnShareResultHandler(int reqID, ResponseState state, PlatformType type, Hashtable result)
+    {
+        if (state == ResponseState.Success)
+        {
+            //print("share successfully - share result :");
+            //print(MiniJSON.jsonEncode(result));
+            //Hide Share Panel!
+        }
+        else if (state == ResponseState.Fail)
+        {
+#if UNITY_ANDROID
+            print("fail! throwable stack = " + result["stack"] + "; error msg = " + result["msg"]);
+#elif UNITY_IPHONE
+			print ("fail! error code = " + result["error_code"] + "; error msg = " + result["error_msg"]);
+#endif
+        }
+        else if (state == ResponseState.Cancel)
+        {
+            print("cancel !");
+        }
+    }
+
 }

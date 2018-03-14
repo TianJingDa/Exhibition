@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using cn.sharesdk.unity3d;
+
 
 public class StartFrameWrapper : GuiFrameWrapper
 {
@@ -82,10 +84,13 @@ public class StartFrameWrapper : GuiFrameWrapper
                 shareContentBg.SetActive(!shareContentBg.activeSelf);
                 break;
             case "WeChatBtn":
+                GameManager.Instance.ShareUrl(PlatformType.WeChat);
                 break;
             case "WeChatMomentsBtn":
+                GameManager.Instance.ShareUrl(PlatformType.WeChatMoments);
                 break;
             case "SinaWeiboBtn":
+                GameManager.Instance.ShareUrl(PlatformType.SinaWeibo);
                 break;
             default:
                 MyDebug.LogYellow("Can not find Button: " + btn.name);
