@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Text;
 using System.Collections.Generic;
@@ -82,7 +82,7 @@ public class MiniJSON
 	{
 		var builder = new StringBuilder( BUILDER_CAPACITY );
 		var success = MiniJSON.serializeValue( json, builder );
-
+		
 		return ( success ? builder.ToString() : null );
 	}
 
@@ -132,9 +132,9 @@ public class MiniJSON
 		}
 	}
 
-
+	
 	#region Parsing
-
+	
 	protected static Hashtable parseObject( char[] json, ref int index )
 	{
 		Hashtable table = new Hashtable();
@@ -187,7 +187,7 @@ public class MiniJSON
 		return table;
 	}
 
-
+	
 	protected static ArrayList parseArray( char[] json, ref int index )
 	{
 		ArrayList array = new ArrayList();
@@ -226,44 +226,44 @@ public class MiniJSON
 		return array;
 	}
 
-
+	
 	protected static object parseValue( char[] json, ref int index, ref bool success )
 	{
 		switch( lookAhead( json, index ) )
 		{
-		case MiniJSON.TOKEN_STRING:
-			return parseString( json, ref index );
-		case MiniJSON.TOKEN_NUMBER:
-			return parseNumber( json, ref index );
-		case MiniJSON.TOKEN_CURLY_OPEN:
-			return parseObject( json, ref index );
-		case MiniJSON.TOKEN_SQUARED_OPEN:
-			return parseArray( json, ref index );
-		case MiniJSON.TOKEN_TRUE:
-			nextToken( json, ref index );
-			return Boolean.Parse( "TRUE" );
-		case MiniJSON.TOKEN_FALSE:
-			nextToken( json, ref index );
-			return Boolean.Parse( "FALSE" );
-		case MiniJSON.TOKEN_NULL:
-			nextToken( json, ref index );
-			return null;
-		case MiniJSON.TOKEN_NONE:
-			break;
+			case MiniJSON.TOKEN_STRING:
+				return parseString( json, ref index );
+			case MiniJSON.TOKEN_NUMBER:
+				return parseNumber( json, ref index );
+			case MiniJSON.TOKEN_CURLY_OPEN:
+				return parseObject( json, ref index );
+			case MiniJSON.TOKEN_SQUARED_OPEN:
+				return parseArray( json, ref index );
+			case MiniJSON.TOKEN_TRUE:
+				nextToken( json, ref index );
+				return Boolean.Parse( "TRUE" );
+			case MiniJSON.TOKEN_FALSE:
+				nextToken( json, ref index );
+				return Boolean.Parse( "FALSE" );
+			case MiniJSON.TOKEN_NULL:
+				nextToken( json, ref index );
+				return null;
+			case MiniJSON.TOKEN_NONE:
+				break;
 		}
 
 		success = false;
 		return null;
 	}
 
-
+	
 	protected static string parseString( char[] json, ref int index )
 	{
 		string s = "";
 		char c;
 
 		eatWhitespace( json, ref index );
-
+		
 		// "
 		c = json[index++];
 
@@ -326,7 +326,7 @@ public class MiniJSON
 						Array.Copy( json, index, unicodeCharArray, 0, 4 );
 
 						uint codePoint = UInt32.Parse( new string( unicodeCharArray ), System.Globalization.NumberStyles.HexNumber );
-
+						
 						// convert the integer codepoint to a unicode char and add to string
 						s += Char.ConvertFromUtf32( (int)codePoint );
 
@@ -351,8 +351,8 @@ public class MiniJSON
 
 		return s;
 	}
-
-
+	
+	
 	protected static double parseNumber( char[] json, ref int index )
 	{
 		eatWhitespace( json, ref index );
@@ -365,8 +365,8 @@ public class MiniJSON
 		index = lastIndex + 1;
 		return Double.Parse( new string( numberCharArray ) ); // , CultureInfo.InvariantCulture);
 	}
-
-
+	
+	
 	protected static int getLastIndexOfNumber( char[] json, int index )
 	{
 		int lastIndex;
@@ -377,8 +377,8 @@ public class MiniJSON
 			}
 		return lastIndex - 1;
 	}
-
-
+	
+	
 	protected static void eatWhitespace( char[] json, ref int index )
 	{
 		for( ; index < json.Length; index++ )
@@ -387,15 +387,15 @@ public class MiniJSON
 				break;
 			}
 	}
-
-
+	
+	
 	protected static int lookAhead( char[] json, int index )
 	{
 		int saveIndex = index;
 		return nextToken( json, ref saveIndex );
 	}
 
-
+	
 	protected static int nextToken( char[] json, ref int index )
 	{
 		eatWhitespace( json, ref index );
@@ -404,37 +404,37 @@ public class MiniJSON
 		{
 			return MiniJSON.TOKEN_NONE;
 		}
-
+		
 		char c = json[index];
 		index++;
 		switch( c )
 		{
-		case '{':
-			return MiniJSON.TOKEN_CURLY_OPEN;
-		case '}':
-			return MiniJSON.TOKEN_CURLY_CLOSE;
-		case '[':
-			return MiniJSON.TOKEN_SQUARED_OPEN;
-		case ']':
-			return MiniJSON.TOKEN_SQUARED_CLOSE;
-		case ',':
-			return MiniJSON.TOKEN_COMMA;
-		case '"':
-			return MiniJSON.TOKEN_STRING;
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4': 
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		case '-': 
-			return MiniJSON.TOKEN_NUMBER;
-		case ':':
-			return MiniJSON.TOKEN_COLON;
+			case '{':
+				return MiniJSON.TOKEN_CURLY_OPEN;
+			case '}':
+				return MiniJSON.TOKEN_CURLY_CLOSE;
+			case '[':
+				return MiniJSON.TOKEN_SQUARED_OPEN;
+			case ']':
+				return MiniJSON.TOKEN_SQUARED_CLOSE;
+			case ',':
+				return MiniJSON.TOKEN_COMMA;
+			case '"':
+				return MiniJSON.TOKEN_STRING;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4': 
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+			case '-': 
+				return MiniJSON.TOKEN_NUMBER;
+			case ':':
+				return MiniJSON.TOKEN_COLON;
 		}
 		index--;
 
@@ -484,10 +484,10 @@ public class MiniJSON
 	}
 
 	#endregion
-
-
+	
+	
 	#region Serialization
-
+	
 	protected static bool serializeObjectOrArray( object objectOrArray, StringBuilder builder )
 	{
 		if( objectOrArray is Hashtable )
@@ -495,16 +495,16 @@ public class MiniJSON
 			return serializeObject( (Hashtable)objectOrArray, builder );
 		}
 		else if( objectOrArray is ArrayList )
-		{
-			return serializeArray( (ArrayList)objectOrArray, builder );
-		}
-		else
-		{
-			return false;
-		}
+			{
+				return serializeArray( (ArrayList)objectOrArray, builder );
+			}
+			else
+			{
+				return false;
+			}
 	}
 
-
+	
 	protected static bool serializeObject( Hashtable anObject, StringBuilder builder )
 	{
 		builder.Append( "{" );
@@ -515,7 +515,7 @@ public class MiniJSON
 		{
 			string key = e.Key.ToString();
 			object value = e.Value;
-
+			
 			if( !first )
 			{
 				builder.Append( ", " );
@@ -534,18 +534,18 @@ public class MiniJSON
 		builder.Append( "}" );
 		return true;
 	}
-
-
+	
+	
 	protected static bool serializeDictionary( Dictionary<string,string> dict, StringBuilder builder )
 	{
 		builder.Append( "{" );
-
+		
 		bool first = true;
 		foreach( var kv in dict )
 		{
 			if( !first )
 				builder.Append( ", " );
-
+			
 			serializeString( kv.Key, builder );
 			builder.Append( ":" );
 			serializeString( kv.Value, builder );
@@ -556,8 +556,8 @@ public class MiniJSON
 		builder.Append( "}" );
 		return true;
 	}
-
-
+	
+	
 	protected static bool serializeArray( ArrayList anArray, StringBuilder builder )
 	{
 		builder.Append( "[" );
@@ -584,7 +584,7 @@ public class MiniJSON
 		return true;
 	}
 
-
+	
 	protected static bool serializeValue( object value, StringBuilder builder )
 	{
 		//Type t = value.GetType();
@@ -642,7 +642,7 @@ public class MiniJSON
 		return true;
 	}
 
-
+	
 	protected static void serializeString( string aString, StringBuilder builder )
 	{
 		builder.Append( "\"" );
@@ -696,14 +696,14 @@ public class MiniJSON
 		builder.Append( "\"" );
 	}
 
-
+	
 	protected static void serializeNumber( double number, StringBuilder builder )
 	{
 		builder.Append( Convert.ToString( number ) ); // , CultureInfo.InvariantCulture));
 	}
-
+	
 	#endregion
-
+	
 }
 
 
@@ -716,14 +716,14 @@ public static class MiniJsonExtensions
 	{
 		return MiniJSON.jsonEncode( obj );
 	}
-
-
+	
+	
 	public static string toJson( this Dictionary<string,string> obj )
 	{
 		return MiniJSON.jsonEncode( obj );
 	}
-
-
+	
+	
 	public static ArrayList arrayListFromJson( this string json )
 	{
 		return MiniJSON.jsonDecode( json ) as ArrayList;

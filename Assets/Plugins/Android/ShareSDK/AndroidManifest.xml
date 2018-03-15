@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.CicadaStudio.Exhibition"
+    package="com.CicadaStudio.Arithmetic"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -62,7 +62,7 @@
 
         <!-- 微信分享回调 -->
         <activity
-            android:name="com.CicadaStudio.Exhibition.wxapi.WXEntryActivity"
+            android:name="com.CicadaStudio.Arithmetic.wxapi.WXEntryActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />

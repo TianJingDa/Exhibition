@@ -1,29 +1,16 @@
 fileFormatVersion: 2
-guid: d3e26793f32a7436280b675f649df91f
+guid: 431bb603be334a64088f26cf2702d333
 folderAsset: yes
-timeCreated: 1516249148
-licenseType: Free
 PluginImporter:
-  externalObjects: {}
-  serializedVersion: 2
+  serializedVersion: 1
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
-  isOverridable: 0
   platformData:
-  - first:
-      Android: Android
-    second:
+    Any:
       enabled: 1
       settings: {}
-  - first:
-      Any: 
-    second:
-      enabled: 0
-      settings: {}
-  - first:
-      Editor: Editor
-    second:
+    Editor:
       enabled: 0
       settings:
         DefaultValueInitialized: true
