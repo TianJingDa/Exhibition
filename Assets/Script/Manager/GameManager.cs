@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
         }
         if (sID == StateID.RoamState)
         {
-            Player = model.transform.FindChild("Player");
+            Player = model.transform.Find("Player");
             if (!Player)
             {
                 MyDebug.LogYellow("Can Not Find Player!!!");
@@ -160,11 +160,11 @@ public class GameManager : MonoBehaviour
             MyDebug.LogYellow("Can Not Get Main Model!!!");
             return;
         }
-        Player = model.transform.FindChild("Player");
+        Player = model.transform.Find("Player");
         StateID sID = c_StateCtrl.GetCurStateID();
         if (sID == StateID.RoamState)
         {
-            Player = model.transform.FindChild("Player");
+            Player = model.transform.Find("Player");
             if (!Player)
             {
                 MyDebug.LogYellow("Can Not Find Player!!!");

@@ -138,7 +138,7 @@ public class RoamFrameWrapper : GuiFrameWrapper
         joystickLeft.axisX.directTransform = player;
         joystickLeft.axisY.directTransform = player;
         joystickRight.axisX.directTransform = player;
-        joystickRight.axisY.directTransform = player.FindChild("Camera");
+        joystickRight.axisY.directTransform = player.Find("Camera");
     }
 
     public void OnDoubleTap(Gesture gesture)
